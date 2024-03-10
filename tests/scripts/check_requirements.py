@@ -46,10 +46,11 @@ MAIN_RULE_IGNORES = {
 # THe following packages need exceptions because they are optional deps of some other packages. e.g. langchain CAN use openai
 # (pysqlite3 is imported in an unusual way in the chromadb handler and needs to be excluded too)
 # pypdf and openpyxl are optional deps of langchain, that are used for the file handler
-OPTIONAL_HANDLER_DEPS = ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia", "anthropic", "pypdf", "openpyxl"]
+OPTIONAL_HANDLER_DEPS = ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia", "anthropic"]
 
 # List of rules we can ignore for specific packages
 # Here we ignore any packages in the main requirements.txt for "listed but not used" errors, because they will be used for the core code but not necessarily in a given handler
+IGNORED_PACKAGES = ["pypdf", "openpyxl"]
 MAIN_REQUIREMENTS_DEPS = get_requirements_from_file(MAIN_REQS_PATH) + get_requirements_from_file(
     TEST_REQS_PATH) + get_requirements_from_file(GRPC_REQS_PATH)
 
