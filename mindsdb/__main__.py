@@ -32,12 +32,38 @@ from mindsdb.interfaces.database.integrations import integration_controller
 import mindsdb.interfaces.storage.db as db
 from mindsdb.integrations.utilities.install import install_dependencies
 from mindsdb.utilities.fs import create_dirs_recursive, clean_process_marks, clean_unlinked_process_marks
-from mindsdb.utilities.telemetry import telemetry_file_exists, disable_telemetry
-from mindsdb.utilities.context import context as ctx
-from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
+from mindsdb.utilities.telemetry import telem
+try:
+    from mindsdb.utilities.telemetry import disable_telemetry
+    from mindsdb.utilities.context import context as ctx
+    from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
+
+    try:
+        import torch.multiprocessing as mp
+    except ImportError:
+        logger.warning("torch.multiprocessing is not available, using multiprocessing")
+        import multiprocessing as mp
+    else:
+        # pylint: disable=no-member
+        mp.set_start_method('spawn')
+        logger.info("Using torch.multiprocessing")
+except ImportError:
+    logger.warning("torch.multiprocessing is not available, using multiprocessing")
+    import multiprocessing as mp
+else:
+    # pylint: disable=no-member
+    mp.set_start_method('spawn')
+    logger.info("Using multiprocessing")
 
 try:
     import torch.multiprocessing as mp
+except ImportError:
+    logger.warning("torch.multiprocessing is not available, using multiprocessing")
+    import multiprocessing as mp
+else:
+    # pylint: disable=no-member
+    mp.set_start_method('spawn')
+    logger.info("Using torch.multiprocessing")
 except Exception:
     import multiprocessing as mp
 try:
