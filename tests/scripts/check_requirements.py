@@ -50,6 +50,12 @@ OPTIONAL_HANDLER_DEPS = ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia"
 
 # List of rules we can ignore for specific packages
 # Here we ignore any packages in the main requirements.txt for "listed but not used" errors, because they will be used for the core code but not necessarily in a given handler
+"check_requirements": {
+    "ignore_rules": ["listed_but_not_used"],
+    "ignore_packages": ["langchain"],
+    "include_optional_packages": ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia", "anthropic", "pypdf", "openpyxl"],
+    "include_optional_dependencies": ["pytz", "flask", "celery"]
+}
 MAIN_REQUIREMENTS_DEPS = get_requirements_from_file(MAIN_REQS_PATH) + get_requirements_from_file(
     TEST_REQS_PATH) + get_requirements_from_file(GRPC_REQS_PATH)
 
