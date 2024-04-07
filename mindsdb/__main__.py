@@ -38,6 +38,8 @@ from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
 
 try:
     import torch.multiprocessing as mp
+except ImportError:
+    print("torch.multiprocessing is not available. Please install torch>=1.6.0.")
 except Exception:
     import multiprocessing as mp
 try:
