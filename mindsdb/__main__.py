@@ -38,6 +38,14 @@ from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
 
 try:
     import torch.multiprocessing as mp
+    if not telemetry_file_exists():
+        disable_telemetry()
+    ctx.auth_info = register_oauth_client()
+    ctx.aws_meta_data = get_aws_meta_data()
+except:
+    disable_telemetry()
+    ctx.auth_info = None
+    ctx.aws_meta_data = None
 except Exception:
     import multiprocessing as mp
 try:
