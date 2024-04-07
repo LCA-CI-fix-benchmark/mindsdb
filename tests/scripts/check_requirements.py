@@ -43,7 +43,7 @@ MAIN_RULE_IGNORES = {
     "DEP002": ["psycopg2-binary"],
 }
 
-# THe following packages need exceptions because they are optional deps of some other packages. e.g. langchain CAN use openai
+# The following packages need exceptions because they are optional deps of some other packages. e.g. langchain CAN use openai
 # (pysqlite3 is imported in an unusual way in the chromadb handler and needs to be excluded too)
 # pypdf and openpyxl are optional deps of langchain, that are used for the file handler
 OPTIONAL_HANDLER_DEPS = ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia", "anthropic", "pypdf", "openpyxl"]
