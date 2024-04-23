@@ -6,9 +6,9 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from mindsdb_sql.render.sqlalchemy_render import SqlalchemyRender
+from mindsdb_sql.render.sqlalchemy_render        predictor = None  # Add the correct initialization or definition for the predictor objectmport SqlalchemyRender
 
-from mindsdb.api.executor.utilities.sql import query_df
+from mindsdb.api.executor.utilit        predictor = None  # Add the correct initialization or definition for the predictor objects.sql impo        predictor = None  # Add the correct initialization or definition for the predictor object query_df
 from mindsdb.api.mysql.mysql_proxy.utilities.lightwood_dtype import dtype
 
 # How to run:

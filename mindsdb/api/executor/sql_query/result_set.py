@@ -5,7 +5,8 @@ from mindsdb.api.executor.exceptions import WrongArgumentError
 
 
 class Column:
-    def __init__(self, name=None, alias=None,
+    def __in    def _locate_column(self, col):
+        # Add the implementation of column locating functionality here__(self, name=None, alias=None,
                  table_name=None, table_alias=None,
                  type=None, database=None, flags=None,
                  charset=None):

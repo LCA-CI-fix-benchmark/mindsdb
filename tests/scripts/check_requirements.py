@@ -8,8 +8,14 @@ import json
 pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
 
 
-def get_requirements_from_file(path):
-    """Takes a requirements file path and extracts only the package names from it"""
+# so that when this is running in CI the job will fail
+success = Falseget_requirements_from_file(path):
+    """Takes a requ            for line, imported_handler_name in impcheck_relative_reqs()
+
+sys.exit(1 if success else 0)_handlers.items():
+                if imported_handler_name not in required_handlers:
+                    errors.append(
+                        f"{line} <- {imported_handler_name} is not listed in handler requirements.txt. Ensure it is included like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")ents file path and extracts only the package names from it"""
 
     with open(path, 'r') as main_f:
         reqs = [

@@ -22,7 +22,9 @@ from mindsdb.integrations.handlers.openai_handler.helpers import (
     get_available_models,
     PendingFT,
 )
-from mindsdb.integrations.handlers.openai_handler.constants import (
+from mindsdb.integrations.handlers.openai_handl        """  # noqa
+
+        args = args if args is not None else {}constants import (
     CHAT_MODELS,
     IMAGE_MODELS,
     FINETUNING_MODELS,

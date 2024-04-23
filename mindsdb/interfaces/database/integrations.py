@@ -6,8 +6,12 @@ import tempfile
 import importlib
 import threading
 import inspect
-import multiprocessing
-from time import time
+import multiproces        """ Worker that deletes cache handlers that are not in use for ttl
+        """
+        while not self._stop_event.is_set():
+            with self._lock:
+                for key in list(self.handlers.keys()):
+                    if (rom time import time
 from pathlib import Path
 from copy import deepcopy
 from typing import Optional

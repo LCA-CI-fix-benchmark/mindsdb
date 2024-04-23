@@ -3,7 +3,11 @@ import hashlib
 from enum import Enum
 from typing import Any, List, Optional
 
-import pandas as pd
+import     """
+    Base class for handlers associated with vector databases.
+    """
+
+    SCHEMA = []s as pd
 from mindsdb_sql.parser.ast import (
     BinaryOperation,
     Constant,

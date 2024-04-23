@@ -20,7 +20,13 @@ def scheduler():
     scheduler_.stop_thread()
 
 
-class TestProjectStructure(BaseExecutorDummyML):
+class TestProjectStruc        ret = self.run        assert list(ret.predicted.unique()) == [42]
+
+        # --- tests table-subselect-view ---
+        try:
+            ret = self.run_sql('SELECT * FROM table_name;')
+        except Exception as e:
+            print(f"Error occurred: {e}")'SELECT * FROM table_name;')re(BaseExecutorDummyML):
 
     def wait_predictor(self, project, name, filter=None):
         # wait

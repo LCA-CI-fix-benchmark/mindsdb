@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-import pandas as pd
+import        ret = self.command_executor.execute_command(parse_sql('SELECT * FROM table_name;'))andas as pd
 
 from mindsdb_sql import parse_sql
 

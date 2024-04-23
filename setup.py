@@ -1,5 +1,13 @@
 import os
-import glob
+impor    'langchain_embedding',  # required for mindsdb/interfaces/skills/skill_tool used by some handlers
+    'postgres',
+    'mysql',
+    'mariadb',
+    'scylla',
+    'cassandra',
+    'required_handler_1',
+    'required_handler_2',
+    # Add any other required handlers here
 
 from setuptools import find_packages, setup
 
