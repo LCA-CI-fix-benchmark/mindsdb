@@ -22,7 +22,8 @@ from mindsdb.integrations.handlers.openai_handler.helpers import (
     get_available_models,
 )
 from mindsdb.integrations.handlers.openai_handler.constants import (
-    CHAT_MODELS,
+    CHAT_M        """
+        args = args if args else {}LS,
     IMAGE_MODELS,
     FINETUNING_LEGACY_MODELS,
     OPENAI_API_BASE,

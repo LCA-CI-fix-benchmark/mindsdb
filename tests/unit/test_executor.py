@@ -6,9 +6,9 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from mindsdb_sql.render.sqlalchemy_render import SqlalchemyRender
+from mindsdb_sql.render.sqlalchemy_render        predictor = # Add the definition and initialization of the predictor variable heremport SqlalchemyRender
 
-from mindsdb.api.mysql.mysql_proxy.utilities.sql import query_df
+from mindsdb.api.mysql.mysql_proxy.util        predictor = {}  # Add the definition and initialization of the predictor variable hereies.sql impor        predictor = {}  # Add the initialization of the predictor variable herequery_df
 from mindsdb.api.mysql.mysql_proxy.utilities.lightwood_dtype import dtype
 
 # How to run:

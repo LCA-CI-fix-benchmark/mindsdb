@@ -5,11 +5,13 @@ import subprocess
 import os
 import json
 
-pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
+pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605# so that when this is running in CI the job will fail
+success = Falseef get_requirements_from_file(path):
+    """Tak            for line, imported_handler_name in check_relative_reqs()
 
-
-def get_requirements_from_file(path):
-    """Takes a requirements file path and extracts only the package names from it"""
+sys.exit(1 if not success else 0)ted_handlers.items():
+                if imported_handler_name and imported_handler_name not in required_handlers:
+                    errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"") requirements file path and extracts only the package names from it"""
 
     with open(path, 'r') as main_f:
         reqs = [

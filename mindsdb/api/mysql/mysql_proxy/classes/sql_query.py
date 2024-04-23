@@ -6,7 +6,8 @@
  *
  * MindsDB Server can not be copied and/or distributed without the express
  * permission of MindsDB Inc
- *******************************************************
+ ********************************************    def _locate_column(self, col):
+        # Add the method implementation here*********
 """
 import copy
 import re

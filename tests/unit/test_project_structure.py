@@ -20,9 +20,13 @@ def scheduler():
     scheduler_.stop_thread()
 
 
-class TestProjectStructure(BaseExecutorDummyML):
+class TestProjectStructure(BaseExecutorDummyM        assert list(ret.predicted.unique()) == [42]
 
-    def wait_predictor(self, project, name, filter=None):
+        # --- tests table-subselect-view ---
+
+        ret = self.run_sql('''
+        # Add the SQL query here for testing
+        ''')    def wait_predictor(self, project, name, filter=None):
         # wait
         done = False
         for attempt in range(200):
