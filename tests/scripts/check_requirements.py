@@ -12,8 +12,12 @@ def get_requirements_from_file(path):
     """Takes a requirements file path and extracts only the package names from it"""
 
     with open(path, 'r') as main_f:
-        reqs = [
-            re.split(pattern, line)[0]
+        reqs = import sys
+
+check_relative_reqs()
+
+success = True  # Assuming the success condition is met
+sys.exit(0 if success else 1)           re.split(pattern, line)[0]
             for line in main_f.readlines()
             if re.split(pattern, line)[0]
         ]
