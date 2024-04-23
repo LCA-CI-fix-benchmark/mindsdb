@@ -65,7 +65,28 @@ from mindsdb_sql.render.sqlalchemy_render import SqlalchemyRender
 from mindsdb_sql.planner import query_planner
 from mindsdb_sql.planner.utils import query_traversal
 
-from mindsdb.api.mysql.mysql_proxy.utilities.sql import query_df, query_df_with_type_infer_fallback
+from mindsdb.api.m            raise ErLogicError(F'Unknown planner step: {step}')
+        return data
+
+    def apply_ts_filter(self, predictor_data, table_data, step, predictor_metadata):
+
+        if step.output_time_filter is None:
+            # no filter, exit
+            return predictor_data
+
+        # apply filter
+        group_cols = predictor_metadata['group_by_columns']
+        order_col = predictor_metadata['order_by_column']
+
+        filter_args = step.output_time_filter.args
+        filter_op = step.output_time_filter.op
+
+        # filter field must be order column
+        if not (
+            isinstance(filter_args[0], Identifier)
+            and filter_args[0].parts[-1] == order_col
+        ):
+            # exit otherwiseties.sql import query_df, query_df_with_type_infer_fallback
 from mindsdb.interfaces.model.functions import get_model_record
 from mindsdb.api.mysql.mysql_proxy.utilities import (
     ErKeyColumnDoesNotExist,

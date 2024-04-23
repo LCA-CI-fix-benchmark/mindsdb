@@ -5,10 +5,14 @@ import subprocess
 import os
 import json
 
-pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
-
-
-def get_requirements_from_file(path):
+pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605def print_errors(file, errors):
+    if len(errors) > 0:
+        print(f"- {file}")
+        for line in errors:
+            print("    " + line)
+        print()
+        return True
+    return Falsequirements_from_file(path):
     """Takes a requirements file path and extracts only the package names from it"""
 
     with open(path, 'r') as main_f:

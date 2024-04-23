@@ -5,8 +5,28 @@ import subprocess
 import atexit
 import asyncio
 import re
-import sys
+import import json
+import re
 from pathlib import Path
+import subprocess
+
+def close_all_ssh_tunnels():
+    TEST_CONFIG = 'path/to/test_config.json'  # Assuming the path to test config file
+    TEMP_DIR = 'path/to/temp_dir'  # Assuming the path to temporary directory
+
+    with open(TEST_CONFIG, 'rt') as f:
+        config_json = json.loads(f.read())
+        config_json['storage_dir'] = f'{TEMP_DIR}'
+        config_json['storage_db'] = f'sqlite:///{TEMP_DIR}/mindsdb.sqlite3.db?check_same_thread=False&timeout=30'
+
+    RE_PORT_CONTROL = re.compile(r'^\.mindsdb-ssh-ctrl-\d+$')
+    closed_tunnels = []
+    for p in Path('/tmp/mindsdb').iterdir():
+        if p.is_socket() and p.name != '.mindsdb-ssh-ctrl-5005' and RE_PORT_CONTROL.match(p.name):
+            sp = subprocess.Popen(f'ssh -S /tmp/mindsdb/{p.name} -O exit ubuntu@3.220.66.106', shell=True)
+            closed_tunnels.append(p.name)
+    
+    return closed_tunnelshlib import Path
 import signal
 
 import psutil

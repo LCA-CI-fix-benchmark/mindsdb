@@ -3,7 +3,23 @@ import requests
 from typing import Dict, List
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from mindsdb.utilities import log
+from m                task = self._get_video_indexing_task(task_id=task_id)
+                status = task['status']
+                logger.info(f"Task {task_id} is in the {status} state.")
+
+                wait_duration = task['process']['remain_seconds'] if 'process' in task and 'remain_seconds' in task['process'] else DEFAULT_WAIT_DURATION
+
+                if status in ('pending', 'indexing', 'validating'):
+                    logger.info(f"Task {task_id} will be polled again in {wait_duration} seconds.")
+                    time.sleep(wait_duration)
+
+                elif status == 'ready':
+                    logger.info(f"Task {task_id} completed successfully.")
+                    is_task_running = False
+
+                else:
+                    logger.error(f"Task {task_id} failed with status {task['status']}.")
+                    # TODO: Update Exception handling to be more specificimport log
 
 
 logger = log.getLogger(__name__)
