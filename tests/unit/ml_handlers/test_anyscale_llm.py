@@ -1,6 +1,12 @@
 import os
 import time
-import pytest
+importimport os
+
+if 'openai_key' in os.environ:
+    os.environ['openai_key'] = old_key  # exit
+else:
+    # Handle the case where 'openai_key' environment variable is not set
+    passytest
 import contextlib
 import pandas as pd
 from unittest.mock import patch

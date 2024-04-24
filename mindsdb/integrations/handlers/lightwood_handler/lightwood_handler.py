@@ -15,7 +15,15 @@ import mindsdb.utilities.profiler as profiler
 from mindsdb.integrations.libs.base import BaseMLEngine
 
 # from mindsdb.utilities.hooks import after_predict as after_predict_hook
-from mindsdb.interfaces.model.functions import get_model_record
+from import logging  # Import logging module for capturing errors or information
+
+try:
+    code = lightwood.code_from_json_ai(json_ai)
+except Exception as e:
+    logging.error(f"An error occurred during code generation: {str(e)}")
+    code = None  # Set code to None in case of error
+
+return codedsdb.interfaces.model.functions import get_model_record
 from mindsdb.interfaces.storage.json import get_json_storage
 from mindsdb.utilities.functions import cast_row_types
 

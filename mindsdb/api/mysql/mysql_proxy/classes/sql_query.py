@@ -65,9 +65,160 @@ from mindsdb_sql.render.sqlalchemy_render import SqlalchemyRender
 from mindsdb_sql.planner import query_planner
 from mindsdb_sql.planner.utils import query_traversal
 
-from mindsdb.api.mysql.mysql_proxy.utilities.sql import query_df, query_df_with_type_infer_fallback
-from mindsdb.interfaces.model.functions import get_model_record
-from mindsdb.api.mysql.mysql_proxy.utilities import (
+from mindsdb.api.mysql.mysql_proxy.utilimport re
+import datetime as dt
+import dateinfer
+import pandas as pd
+from mindsdb.api.mysql.mysql_proxy.classes.sql_query import Constant, Latest, BetweenOperation, BinaryOperation
+
+# exit otherwise
+return predictor_data
+
+def get_date_format(samples):
+    # dateinfer reads sql date 2020-04-01 as yyyy-dd-mm. workaround for in
+    for date_format, pattern in (
+        ('%Y-%m-%d', r'[\d]{4}-[\d]{2}-[\d]{2}'),
+        ('%Y-%m-%d %H:%M:%S', r'[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}'),
+        # ('%Y-%m-%d %H:%M:%S%z', r'[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}\+[\d]{2}:[\d]{2}'),
+        # ('%Y', '[\d]{4}')
+    ):
+        if re.match(pattern, samples[0]):
+            # suggested format
+            for sample in samples:
+                try:
+                    dt.datetime.strptime(sample, date_format)
+                except ValueError:
+                    date_format = None
+                    break
+            if date_format is not None:
+                return date_format
+
+    return dateinfer.infer(samples)
+
+if self.model_types.get(order_col) in ('float', 'integer'):
+    # convert strings to digits
+    fnc = {
+        'integer': int,
+        'float': float
+    }[self.model_types[order_col]]
+
+    # convert predictor_data
+    if len(predictor_data) > 0:
+        if isinstance(predictor_data[0][order_col], str):
+
+            for row in predictor_data:
+                row[order_col] = fnc(row[order_col])
+        elif isinstance(predictor_data[0][order_col], dt.date):
+            # convert to datetime
+            for row in predictor_data:
+                row[order_col] = fnc(row[order_col])
+
+    # convert predictor_data
+    if isinstance(table_data[0][order_col], str):
+
+        for row in table_data:
+            row[order_col] = fnc(row[order_col])
+    elif isinstance(table_data[0][order_col], dt.date):
+        # convert to datetime
+        for row in table_data:
+            row[order_col] = fnc(row[order_col])
+
+    # convert args to date
+    samples = [
+        arg.value
+        for arg in filter_args
+        if isinstance(arg, Constant) and isinstance(arg.value, str)
+    ]
+    if len(samples) > 0:
+
+        for arg in filter_args:
+            if isinstance(arg, Constant) and isinstance(arg.value, str):
+                arg.value = fnc(arg.value)
+
+if self.model_types.get(order_col) in ('date', 'datetime') or isinstance(predictor_data[0][order_col], pd.Timestamp):  # noqa
+    # convert strings to date
+    # it is making side effect on original data by changing it but let it be
+
+    def _cast_samples(data, order_col):
+        if isinstance(data[0][order_col], str):
+            samples = [row[order_col] for row in data]
+            date_format = get_date_format(samples)
+
+            for row in data:
+                row[order_col] = dt.datetime.strptime(row[order_col], date_format)
+        elif isinstance(data[0][order_col], dt.datetime):
+            pass  # check because dt.datetime is instance of dt.date but here we don't need to add HH:MM:SS
+        elif isinstance(data[0][order_col], dt.date):
+            # convert to datetime
+            for row in data:
+                row[order_col] = dt.datetime.combine(row[order_col], dt.datetime.min.time())
+
+    # convert predictor_data
+    if len(predictor_data) > 0:
+        _cast_samples(predictor_data, order_col)
+
+    # convert table data
+    _cast_samples(table_data, order_col)
+
+    # convert args to date
+    samples = [
+        arg.value
+        for arg in filter_args
+        if isinstance(arg, Constant) and isinstance(arg.value, str)
+    ]
+    if len(samples) > 0:
+        date_format = get_date_format(samples)
+
+        for arg in filter_args:
+            if isinstance(arg, Constant) and isinstance(arg.value, str):
+                arg.value = dt.datetime.strptime(arg.value, date_format)
+    # TODO can be dt.date in args?
+
+# first pass: get max values for Latest in table data
+latest_vals = {}
+if Latest() in filter_args:
+
+    for row in table_data:
+        if group_cols is None:
+            key = 0  # the same for any value
+        else:
+            key = tuple([str(row[i]) for i in group_cols])
+        val = row[order_col]
+        if key not in latest_vals or latest_vals[key] < val:
+            latest_vals[key] = val
+
+# second pass: do filter rows
+data2 = []
+for row in predictor_data:
+    val = row[order_col]
+
+    if isinstance(step.output_time_filter, BetweenOperation):
+        if val >= filter_args[1].value and val <= filter_args[2].value:
+            data2.append(row)
+    elif isinstance(step.output_time_filter, BinaryOperation):
+        op_map = {
+            '<': '__lt__',
+            '<=': '__le__',
+            '>': '__gt__',
+            '>=': '__ge__',
+            '=': '__eq__',
+        }
+        arg = filter_args[1]
+        if isinstance(arg, Latest):
+            if group_cols is None:
+                key = 0  # the same for any value
+            else:
+                key = tuple([str(row[i]) for i in group_cols])
+            if key not in latest_vals:
+                # pass this row
+                continue
+            arg = latest_vals[key]
+        elif isinstance(arg, Constant):
+            arg = arg.value
+
+        if filter_op not in op_map:
+            # unknown operation, exit immediately
+            return predictor_dataysql_proxy.utilities import (
     ErKeyColumnDoesNotExist,
     ErNotSupportedYet,
     SqlApiUnknownError,

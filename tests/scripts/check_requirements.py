@@ -5,9 +5,8 @@ import subprocess
 import os
 import json
 
-pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
-
-
+pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605# so that when this is running in CI the job will fail
+success = False
 def get_requirements_from_file(path):
     """Takes a requirements file path and extracts only the package names from it"""
 
