@@ -3,8 +3,36 @@ import datetime as dt
 import json
 import os
 import sys
-import tempfile
-from unittest import mock
+importimport os
+
+def unload_module(module_name):
+    # Unload a module from memory
+    if module_name in globals():
+        del globals()[module_name]
+
+class TestExecutor:
+    @classmethod
+    def teardown_class(cls):
+        # remove tmp db file
+        cls.db.session.close()
+        os.unlink(cls.db_file)
+
+        # remove environ for next tests
+        del os.environ["MINDSDB_DB_CON"]
+
+        # remove import of mindsdb for next tests
+        unload_module("mindsdb")
+
+    def setup_method(self):
+        self.clear_db(self.db)
+
+    def clear_db(self, db):
+        # drop
+        db.session.rollback()
+        db.Base.metadata.drop_all(db.engine)
+
+        # create
+        db.Base.metadata.create_all(db.engine)st import mock
 from pathlib import Path
 
 import duckdb

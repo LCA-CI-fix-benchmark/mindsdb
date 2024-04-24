@@ -5,7 +5,37 @@ from typing import List
 import nltk
 import pandas as pd
 from nltk import word_tokenize
-from nltk.translate.bleu_score import (  # todo investigate why this always returns 0, not used for now
+from nltk.translate.bleu_score import (  # todo import ast
+from scipy.spatial import distance
+
+class EvaluateHandler:
+    @staticmethod
+    def extract_answers(df):
+        answers = df["answers"].tolist()
+        extracted_answers = []
+
+        for answer in answers:
+            try:
+                extracted_answers.append(ast.literal_eval(answer)["text"][0])
+            except (IndexError, ValueError, KeyError) as e:
+                logger.error(f"Error occurred while extracting answers: {e}")
+                extracted_answers.append("")
+                continue
+
+        return extracted_answers
+
+    @staticmethod
+    def _calculate_cosine_similarity(
+        gt_embeddings: List[float], test_embeddings: List[float]
+    ) -> float:
+        """Calculate cosine similarity between a context and retrieved context embedding"""
+        try:
+            cosine_sim = 1 - distance.cosine(gt_embeddings, test_embeddings)
+        except (ValueError, ZeroDivisionError) as e:
+            logger.error(f"Error occurred during cosine similarity calculation: {e}")
+            cosine_sim = 0.0
+
+        return cosine_simalways returns 0, not used for now
     sentence_bleu,
 )
 from nltk.translate.meteor_score import meteor_score

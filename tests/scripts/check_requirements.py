@@ -2,7 +2,31 @@ import glob
 import re
 import sys
 import subprocess
-import os
+# Here we ignore any packages in the main requirements.txt for "list# so that when this is running in CI the job will fail
+success = False
+
+def print_errors(file, errors):
+    global success
+    if len(errors) > 0:
+        success = False
+        print(f"- {file}")
+        for line in errors:
+            print("    " + line)
+        print()
+
+def get_ignores_str(ignores_dict):
+    """Get a list of rule ignores for deptry"""
+
+    return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])ors, because they will be used for the core code but not necessarily in a given handler
+MAIN_REQUIREMENTS_DEPS = get_requirements_from_file(MAIN_REQS_PATH) + get_requirements_from_file(TEST_REQS_PATH) + get_requirements_from_file(GRPC_REQS_PATH)
+
+BYOM_HANDLER_DEPS = ["pyarrow"]
+OPTIONAL_HANDLER_DEPS = ["numpy", "pandas"]  # Define OPTIONAL_HANDLER_DEPS
+
+HANDLER_RULE_IGNORES = {
+    "DEP002": OPTIONAL_HANDLER_DEPS + MAIN_REQUIREMENTS_DEPS + BYOM_HANDLER_DEPS,
+    "DEP001": ["tests"]  # 'tests' is the mindsdb tests folder in the repo root
+}
 import json
 
 pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605

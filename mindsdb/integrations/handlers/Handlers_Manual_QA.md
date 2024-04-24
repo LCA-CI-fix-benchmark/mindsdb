@@ -1,4 +1,16 @@
-## Handlers QA Testing
+#This file contains links to QA tests of the existing handlers.
+
+Please follow the instructions below to append your QA tests:
+
+1. If all tests pass, add this line:
+   `XXX Test Passed: [link to the test results in your GitHub repository]`
+
+2. If some tests fail, create an issue to report it and add this line:
+   `XXX Test Failed: [link to the test results in your GitHub repository], [link to the issue]`
+
+### Test Results
+- XXX Test Passed: [Insert link to passed tests]
+- XXX Test Failed: [Insert link to failed tests], [Insert link to the issue]s QA Testing
 
 This file contains links to QA tests of the existing handlers.
 

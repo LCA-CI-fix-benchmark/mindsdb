@@ -4,7 +4,26 @@ import unittest
 import tempfile
 
 temp_dir = tempfile.mkdtemp(dir='/tmp/', prefix='lightwood_handler_test_')
-os.environ['MINDSDB_STORAGE_DIR'] = os.environ.get('MINDSDB_STORAGE_DIR', temp_dir)
+os.environ['MINDSDB_STORAGE_DIR'] = os.environ.get(        # Reactivate and add to the rest of the TS tests once cache is back on
+        p = self.handler.storage.get('models')
+        m = load_predictor(p[self.test_model_2], self.test_model_2)
+        assert m.problem_definition.timeseries_settings.is_timeseries
+
+    def test_12_train_ts_predictor_multigby_hor1(self):
+        query = f"""
+            CREATE PREDICTOR {self.test_model_2}
+            FROM {PG_HANDLER_NAME} (SELECT * FROM {self.data_table_2})
+            PREDICT ma
+            ORDER BY saledate
+            GROUP BY bedrooms, type
+            WINDOW 8
+            HORIZON 1
+        """
+        if self.test_model_2 not in self.handler.get_tables().data_frame.values:
+            self.handler.native_query(query)
+        else:
+            self.handler.native_query(f"DROP PREDICTOR {self.test_model_2}")
+            self.handler.native_query(query), temp_dir)
 os.environ['MINDSDB_DB_CON'] = 'sqlite:///' + os.path.join(os.environ['MINDSDB_STORAGE_DIR'], 'mindsdb.sqlite3.db') + '?check_same_thread=False&timeout=30'
 
 from mindsdb.migrations import migrate

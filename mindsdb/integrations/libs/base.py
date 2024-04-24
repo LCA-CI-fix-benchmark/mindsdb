@@ -6,7 +6,42 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 from mindsdb_sql.parser.ast.base import ASTNode
-from mindsdb.utilities import log
+fr        E.g.,
+        args["key1"] -> "key1" is accessed, and it is required
+        args.get("key2", "default_value") -> "key2" is accessed, and it is optional (default value is provided)
+
+        Return a list of dict
+        where each dict looks like
+        {
+            "name": "key1",
+            "required": True
+        }
+        """
+        try:
+            source_code = self.get_source_code(method_name)
+        except Exception as e:
+            logger.error(
+                f"Failed to get source code of method {method_name} in {self.__class__.__name__}. Reason: {e}"
+            )
+            return []
+
+        param_info = []
+        # parse the source code
+        # fix the indentation
+        source_code = textwrap.dedent(source_code)
+        # parse the source code
+        tree = ast.parse(source_code)
+        
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                if isinstance(node.func, ast.Attribute) and isinstance(node.func.value, ast.Name) and node.func.value.id == 'args':
+                    arg_name = node.func.attr
+                    required = True
+                    if len(node.args) == 2 and isinstance(node.args[1], ast.Str):
+                        required = False
+                    param_info.append({"name": arg_name, "required": required})
+
+        return param_infoort log
 
 from mindsdb.integrations.libs.response import HandlerResponse, HandlerStatusResponse
 

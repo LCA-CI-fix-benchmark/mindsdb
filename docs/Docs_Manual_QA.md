@@ -1,4 +1,14 @@
-## Docs QA Testing
+#This file contains links to QA tests of the existing docs.
+
+Please follow the instructions below to append your QA tests:
+
+1. If all tests passed, add this line:
+   `XXX Test Passed: [link to the test results in your GitHub repository]`
+
+2. If some tests failed, create an issue to report it and add this line:
+   `XXX Test Failed: [link to the test results in your GitHub repository], [link to the issue]`
+
+### Test Results Testing
 
 This file contains links to QA tests of the existing docs.
 

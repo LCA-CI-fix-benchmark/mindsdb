@@ -20,9 +20,40 @@ def scheduler():
     scheduler_.stop_thread()
 
 
-class TestProjectStructure(BaseExecutorDummyML):
+class TestProjectStructure(BaseExec        # Check if there are no records where t1.a is less than or equal to 1
+        assert ret[ret.t1a <= 1].empty
 
-    def wait_predictor(self, project, name, filter=None):
+        # Check if there are no records where t3a is equal to 4
+        assert ret[ret.t3a == 4].empty
+
+        # Check the count of records where t3a is equal to 6 and where t3a is None
+        assert len(ret[ret.t3a == 6]) == 1
+        assert len(ret[ret.t3a.isna()]) == 1
+
+        # Check the unique values in the 'predicted' column
+        assert list(ret.predicted.unique()) == [42]
+
+        # --- tests table-subselect-view ---
+
+        # Run a SQL query and validate the result has 1 row
+        ret = self.run_sql('''
+            SELECT t1.a t1a,
+                   t2.t1a t2t1a, t2.t3a t2t3a,
+                   t3.c t3c, t3.a t3a
+              FROM pg.tbl1 as t1
+              JOIN (
+                  SELECT t1.a as t1a,  t3.a t3a
+                  FROM pg.tbl1 as t1
+                  JOIN pg.tbl2 as t2 on t1.c=t2.c
+                  LEFT JOIN pg.tbl1 as t3 on t2.a=t3.a
+                  where t1.a=1
+              ) t2 on t2.t3a = t1.a
+              LEFT JOIN mindsdb.view2 as t3 on t1.c=t3.c
+              where t1.a>1
+        ''')
+
+        # Validate that the result contains only 1 row
+        assert len(ret) == 1ictor(self, project, name, filter=None):
         # wait
         done = False
         for attempt in range(200):

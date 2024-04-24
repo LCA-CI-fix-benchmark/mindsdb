@@ -1,5 +1,29 @@
-import json
-from pathlib import Path
+ifrom pathlib import Path
+
+import mysql.connector
+import pytest
+
+from .test_mysql_api import TestMySqlApi, Dlist
+
+# used by (required for) mindsdb_app fixture in conftest
+API_LIST = ["http", "mysql"]
+
+
+@pytest.mark.usefixtures("mindsdb_app")
+class TestMySqlBinApi(TestMySqlApi):
+    """Test mindsdb mysql api.
+    All sql commands are being executed through binary mode of mysql protocol.
+    This class inherits all tests from TestMySqlApi:
+    -k 'not TestMySqlApi' is required for test launch.
+    Otherwise inherited tests will be executed twice:
+    First one for TestMySqlApi, second one for TestMysqlBinApi
+    In general all tests do next:
+        1. Do some preconditions
+        2. Specify SQL query needs to be executed
+        3. Send the query to a Mindsdb app in binary mode and execute the query
+
+    def query(self, _query, encoding='utf-8'):
+        passport Path
 
 import mysql.connector
 import pytest
