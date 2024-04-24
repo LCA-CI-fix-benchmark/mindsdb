@@ -14,7 +14,20 @@ except ImportError:
     MILVUS_INSTALLED = False
 
 
-@pytest.mark.skipif(not MILVUS_INSTALLED, reason="pymilvus is not installed")
+@pytest.mark.skipif(not MILVUS_        sql = """
+            UPDATE milvus_test.testable
+            SET embedding = ARRAY[3.0, 2.0, 1.0]
+            WHERE test = 'test2'
+        """
+        self.run_sql(sql)
+        # check if the data is updated
+        sql = """
+            SELECT * FROM milvus_test.testable
+            WHERE test = 'test2'
+        """
+        ret = self.run_sql(sql)
+        assert ret.shape[0] == 1
+        assert ret.embedding[0] == [3.0, 2.0, 1.0]son="pymilvus is not installed")
 class TestMilvusHandler(BaseExecutorTest):
 
     def run_sql(self, sql):

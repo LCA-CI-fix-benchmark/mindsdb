@@ -2,7 +2,25 @@
 
 env vars to contloll BYOM:
  - MINDSDB_BYOM_ENABLED - can BYOM be uysed or not. Locally enabled by default.
- - MINDSDB_BYOM_INHOUSE_ENABLED - enable or disable 'inhouse' BYOM usage. Locally enabled by default.
+ - MINDSDB_BY        if version is None:
+            version = 1
+        if isinstance(version, str):
+            version = int(version)
+        version_mark = ''
+        if version > 1:
+            version_mark = f'_{version}'
+        version_str = str(version)
+
+        self.engine_storage.fileStorage.pull()
+        try:
+            code = self.engine_storage.fileStorage.file_get(f'code{version_mark}')
+            modules_str = self.engine_storage.fileStorage.file_get(f'modules{version_mark}')
+        except FileNotFoundError:
+            raise Exception(f"Engine version '{version_str}' does not exist")
+
+        if version_str not in self.model_wrappers:
+            connection_args = self.engine_storage.get_connection_args()
+            version_meta = connection_args['versions'][version_str]- enable or disable 'inhouse' BYOM usage. Locally enabled by default.
  - MINDSDB_BYOM_DEFAULT_TYPE - [inhouse|venv] default byom type. Locally it is 'venv' by default.
  - MINDSDB_BYOM_TYPE - [safe|unsafe] - obsolete, same as above.
 """

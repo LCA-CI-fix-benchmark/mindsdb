@@ -1,6 +1,23 @@
 import os
-import time
-import pytest
+import timimport contextlib
+import os
+
+class TestAnyscaleLLM:
+    @staticmethod
+    @contextlib.contextmanager
+    def _use_anyscale_api_key(openai_key='OPENAI_API_KEY'):
+        """ Temporarily updates the API key env var for OpenAI with the Anyscale one. """
+        old_key = os.environ.get(openai_key)
+        os.environ[openai_key] = os.environ.get('ANYSCALE_ENDPOINTS_API_KEY')
+        try:
+            yield os.environ[openai_key]  # enter
+        finally:
+            os.environ[openai_key] = old_key  # exit
+
+    def setup_method(self, method):
+        """Setup test environment, creating a project"""
+        super().setup_method()
+        self.run_sql("create database proj")t
 import contextlib
 import pandas as pd
 from unittest.mock import patch

@@ -1,7 +1,38 @@
 import unittest
 from mindsdb_sql import parse_sql
 
-from mindsdb.integrations.handlers.mongodb_handler.utils.mongodb_render import MongodbRender
+froimport unittest
+from mindsdb.integrations.handlers.mongodb_handler import MongodbRender
+
+class TestMongoDBHandler(unittest.TestCase):
+
+    def test_mongo_handler(self):
+        query = "SELECT x, y FROM tbl1 WHERE x = 1 GROUP BY b, c ORDER BY c DESC LIMIT 5 OFFSET 3"
+        mql = MongodbRender().to_mongo_query(query)
+
+        expected_mql = '''
+            db.tbl1.aggregate([
+               {"$match": {"x": 1}}, 
+               {"$group": {
+                   "_id": {"b": "$b", "c": "$c"}, 
+                   "b": {"$first": "$b"}, 
+                   "c": {"$first": "$c"}
+               }},
+               {"$project": {"_id": 0, "b": "$b", "c": "$c"}}, 
+               {"$skip": 3}, 
+               {"$limit": 2}
+            ])
+        '''.replace('\n', '')
+
+        # test ast to mongo
+        assert mql.to_string().replace(' ', '') == expected_mql.replace(' ', '')
+
+        # Add more test cases for MongoDB handler
+        # Test MySQL query functionality
+        # Test MongoDB query functionality
+
+        # Implement actual test cases for the MongoDB handler
+        # Ensure proper testing of various query types and scenariosmongodb_handler.utils.mongodb_render import MongodbRender
 from mindsdb.api.mongo.utilities.mongodb_parser import MongodbParser
 
 # How to run:

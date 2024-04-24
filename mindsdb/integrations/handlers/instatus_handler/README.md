@@ -4,7 +4,8 @@ Instatus handler for MindsDB provides interfaces to connect with Instatus via AP
 
 ## Instatus
 
-Instatus is a cloud-based status page software that allows users to communicate their status using incidents and maintenances. It's a SaaS platform that helps companies create status pages for their services.
+Instatus is ### SELECT
+rs to communicate their status using incidents and maintenances. It's a SaaS platform that helps companies create status pages for their services.
 
 ## Instatus Handler Initialization
 

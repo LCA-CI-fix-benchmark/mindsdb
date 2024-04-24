@@ -8,8 +8,39 @@ import json
 pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
 
 
-def get_requirements_from_file(path):
-    """Takes a requirements file path and extracts only the package names from it"""
+import subprocess
+import os
+import json
+import re
+import glob
+
+# Decheck_for_requirements_duplicates()
+print()
+
+print("--- Checking that requirements match imports ---")
+check_requirements_imports()
+print()
+
+print("--- Checking handlers that require other handlers ---")
+check_relative_reqs()
+
+import sys
+sys.exit(0 if success else 1)nts or functions that are used in the script
+
+def print_errors(file, errors):
+    # Function implementation
+
+def get_ignores_str(ignores_dict):
+    # Function implementation
+
+def run_deptry(reqs, rule_ignores, path, extra_args=""):
+    # Function implementation
+
+def check_for_requirements_duplicates():
+    # Function implementation
+
+def check_relative_reqs():
+    # Function implementation
 
     with open(path, 'r') as main_f:
         reqs = [

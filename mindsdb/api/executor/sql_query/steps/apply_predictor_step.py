@@ -12,14 +12,156 @@ from mindsdb_sql.parser.ast import (
     BetweenOperation,
     Parameter,
 )
-from mindsdb_sql.planner.step_result import Result
-from mindsdb_sql.planner.steps import (
-    ApplyTimeseriesPredictorStep,
-    ApplyPredictorRowStep,
-    ApplyPredictorStep,
-)
+from mindsdbimport re
+import datetime as dt
+import dateinfer
+import pandas as pd
+from mindsdb.api.executor.sql_query.steps.operations import Latest, BetweenOperation, BinaryOperation
+from mindsdb.api.executor.sql_query.steps.identifier import Identifier
+from mindsdb.api.executor.sql_query.steps.constant import Constant
 
-from mindsdb.api.executor.sql_query.result_set import ResultSet, Column
+class ApplyPredictorStep:
+    def apply_ts_filter(self, predictor_data, table_data, step, predictor_metadata):
+        if step.output_time_filter is None:
+            # no filter, exit
+            return predictor_data
+
+        group_cols = predictor_metadata['group_by_columns']
+        order_col = predictor_metadata['order_by_column']
+        filter_args = step.output_time_filter.args
+        filter_op = step.output_time_filter.op
+
+        if not (
+            isinstance(filter_args[0], Identifier)
+            and filter_args[0].parts[-1] == order_col
+        ):
+            return predictor_data
+
+        def get_date_format(samples):
+            for date_format, pattern in (
+                ('%Y-%m-%d', r'[\d]{4}-[\d]{2}-[\d]{2}'),
+                ('%Y-%m-%d %H:%M:%S', r'[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2}'),
+            ):
+                if re.match(pattern, samples[0]):
+                    for sample in samples:
+                        try:
+                            dt.datetime.strptime(sample, date_format)
+                        except ValueError:
+                            date_format = None
+                            break
+                    if date_format is not None:
+                        return date_format
+            return dateinfer.infer(samples)
+
+        model_types = predictor_metadata['model_types']
+        if model_types.get(order_col) in ('float', 'integer'):
+            fnc = {
+                'integer': int,
+                'float': float
+            }[model_types[order_col]]
+
+            if len(predictor_data) > 0:
+                if isinstance(predictor_data[0][order_col], str):
+                    for row in predictor_data:
+                        row[order_col] = fnc(row[order_col])
+                elif isinstance(predictor_data[0][order_col], dt.date):
+                    for row in predictor_data:
+                        row[order_col] = fnc(row[order_col])
+
+            if isinstance(table_data[0][order_col], str):
+                for row in table_data:
+                    row[order_col] = fnc(row[order_col])
+            elif isinstance(table_data[0][order_col], dt.date):
+                for row in table_data:
+                    row[order_col] = fnc(row[order_col])
+
+            samples = [
+                arg.value
+                for arg in filter_args
+                if isinstance(arg, Constant) and isinstance(arg.value, str)
+            ]
+            if len(samples) > 0:
+                for arg in filter_args:
+                    if isinstance(arg, Constant) and isinstance(arg.value, str):
+                        arg.value = fnc(arg.value)
+
+        if model_types.get(order_col) in ('date', 'datetime') or isinstance(predictor_data[0][order_col], pd.Timestamp):
+            def _cast_samples(data, order_col):
+                if isinstance(data[0][order_col], str):
+                    samples = [row[order_col] for row in data]
+                    date_format = get_date_format(samples)
+
+                    for row in data:
+                        row[order_col] = dt.datetime.strptime(row[order_col], date_format)
+                elif isinstance(data[0][order_col], dt.date):
+                    for row in data:
+                        row[order_col] = dt.datetime.combine(row[order_col], dt.datetime.min.time())
+
+            if len(predictor_data) > 0:
+                _cast_samples(predictor_data, order_col)
+
+            _cast_samples(table_data, order_col)
+
+            samples = [
+                arg.value
+                for arg in filter_args
+                if isinstance(arg, Constant) and isinstance(arg.value, str)
+            ]
+            if len(samples) > 0:
+                date_format = get_date_format(samples)
+
+                for arg in filter_args:
+                    if isinstance(arg, Constant) and isinstance(arg.value, str):
+                        arg.value = dt.datetime.strptime(arg.value, date_format)
+
+        latest_vals = {}
+        if Latest() in filter_args:
+            for row in table_data:
+                if group_cols is None:
+                    key = 0
+                else:
+                    key = tuple([str(row[i]) for i in group_cols])
+                val = row[order_col]
+                if key not in latest_vals or latest_vals[key] < val:
+                    latest_vals[key] = val
+
+        data2 = []
+        for row in predictor_data:
+            val = row[order_col]
+
+            if isinstance(step.output_time_filter, BetweenOperation):
+                if val >= filter_args[1].value and val <= filter_args[2].value:
+                    data2.append(row)
+            elif isinstance(step.output_time_filter, BinaryOperation):
+                op_map = {
+                    '<': '__lt__',
+                    '<=': '__le__',
+                    '>': '__gt__',
+                    '>=': '__ge__',
+                    '=': '__eq__',
+                }
+                arg = filter_args[1]
+                if isinstance(arg, Latest):
+                    if group_cols is None:
+                        key = 0
+                    else:
+                        key = tuple([str(row[i]) for i in group_cols])
+                    if key not in latest_vals:
+                        continue
+                    arg = latest_vals[key]
+                elif isinstance(arg, Constant):
+                    arg = arg.value
+
+                if filter_op not in op_map:
+                    return predictor_data
+
+                filter_op2 = op_map[filter_op]
+                if getattr(val, filter_op2)(arg):
+                    data2.append(row)
+            else:
+                data2.append(row)
+
+        return data2api.executor.sql_query.result_set import ResultSet, Column
 from mindsdb.utilities.cache import get_cache, json_checksum
 
 from .base import BaseStepCall
