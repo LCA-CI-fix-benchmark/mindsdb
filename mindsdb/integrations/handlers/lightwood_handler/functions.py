@@ -4,7 +4,8 @@ import os
 import tempfile
 import traceback
 from datetime import datetime
-from pathlib import Path
+from pathlib            resource_group=RESOURCE_GROUP.PREDICTOR, resource_id=predictor_id,             )ync=True,
+        )mport Path
 
 import lightwood
 import pandas as pd

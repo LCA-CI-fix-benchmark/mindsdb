@@ -2,7 +2,8 @@ import time
 from unittest.mock import patch
 import pandas as pd
 
-from mindsdb_sql import parse_sql
+from mindsdb_s        ret = self.run_sql('describe proj.model_name')
+        assert len(ret) == 1 import parse_sql
 
 
 from tests.unit.executor_test_base import BaseExecutorTest

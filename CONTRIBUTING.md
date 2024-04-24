@@ -1,5 +1,4 @@
-# Contributing to Mindsdb
-
+# Contributing to Mindsd7. Ensure that the CI tests pass successfully
 Being part of the core MindsDB team is accessible to anyone who is motivated and wants to be part of that journey!
 
 Please see below how to contribute to the project, also refer to the contributing documentation.

@@ -20,8 +20,7 @@ def scheduler():
     scheduler_.stop_thread()
 
 
-class TestProjectStructure(BaseExecutorDummyML):
-
+class TestProjectStructure(BaseExecutorDummyML):# Add test cases or assertions to validate the project structure
     def wait_predictor(self, project, name, filter=None):
         # wait
         done = False

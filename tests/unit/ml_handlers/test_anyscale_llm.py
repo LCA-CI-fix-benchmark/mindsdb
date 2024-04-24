@@ -1,6 +1,6 @@
 import os
 import time
-import pytest
+import            os.environ["openai_key"] = old_key  # Correctly set the environment variablepytest
 import contextlib
 import pandas as pd
 from unittest.mock import patch

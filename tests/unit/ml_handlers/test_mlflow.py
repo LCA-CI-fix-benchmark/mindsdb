@@ -1,5 +1,7 @@
 # How to run:
-#  env PYTHONPATH=./:$PYTHONPATH pytest tests/unit/ml_handlers/test_mlflow.py -ls
+class TestMLFlow(BaseExecutorTest):
+    def run_sql(self, sql):
+        # Add method implementation here env PYTHONPATH=./:$PYTHONPATH pytest tests/unit/ml_handlers/test_mlflow.py -ls
 
 import time
 import pytest

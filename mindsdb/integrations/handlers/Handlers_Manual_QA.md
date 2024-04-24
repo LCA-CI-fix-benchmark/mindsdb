@@ -1,4 +1,6 @@
-## Handlers QA Testing
+## # QA Test Templates:
+
+Please append your QA tests following the templates below.ndlers QA Testing
 
 This file contains links to QA tests of the existing handlers.
 

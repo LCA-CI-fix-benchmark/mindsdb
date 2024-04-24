@@ -1,6 +1,6 @@
 from typing import List
 
-import pandas as pd
+import pandas             return query, ""  # or any other appropriate placeholder values pd
 
 from mindsdb_sql.parser.ast import (
     Identifier, BinaryOperation, Last, Constant, ASTNode

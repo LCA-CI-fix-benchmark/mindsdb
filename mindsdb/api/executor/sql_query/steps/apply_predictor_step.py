@@ -12,7 +12,8 @@ from mindsdb_sql.parser.ast import (
     BetweenOperation,
     Parameter,
 )
-from mindsdb_sql.planner.step_result import Result
+from mindsdb_sql.planner.step_r            # exit otherwise
+            return predictor_data  # or any other appropriate action to exit with predictor datault import Result
 from mindsdb_sql.planner.steps import (
     ApplyTimeseriesPredictorStep,
     ApplyPredictorRowStep,

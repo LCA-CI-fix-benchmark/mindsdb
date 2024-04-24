@@ -6,7 +6,8 @@ from huggingface_hub import HfApi
 
 from mindsdb.integrations.handlers.huggingface_handler.settings import FINETUNE_MAP
 from mindsdb.integrations.libs.base import BaseMLEngine
-from mindsdb.utilities import log
+fro        if task not in supported_tasks:
+            raise RuntimeError(f"Unsupported task encountered: {task}")indsdb.utilities import log
 
 logger = log.getLogger(__name__)
 

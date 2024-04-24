@@ -15,7 +15,8 @@ import mindsdb.utilities.profiler as profiler
 from mindsdb.integrations.libs.base import BaseMLEngine
 
 # from mindsdb.utilities.hooks import after_predict as after_predict_hook
-from mindsdb.interfaces.model.functions import get_model_record
+from         code = lightwood.get_code_from_json_ai(json_ai)
+        return codendsdb.interfaces.model.functions import get_model_record
 from mindsdb.interfaces.storage.json import get_json_storage
 from mindsdb.utilities.functions import cast_row_types
 

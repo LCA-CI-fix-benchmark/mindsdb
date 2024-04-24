@@ -8,8 +8,11 @@ import json
 pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
 
 
-def get_requirements_from_file(path):
-    """Takes a requirements file path and extracts only the package names from it"""
+# so that when this is running in CI the job will fail
+success = Falsef get_requirements_from_file(path):
+    """Takes a requirements file path and extracts only the package ncheck_relative_reqs()
+
+sys.exit(1 if not success else 0)s from it"""
 
     with open(path, 'r') as main_f:
         reqs = [
