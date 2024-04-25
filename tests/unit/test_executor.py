@@ -164,8 +164,7 @@ class Test(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- use TS predictor ---
-
-        predictor = {
+        predictor = {...}  # Placeholder for the actual implementation of the predictor
             'name': 'task_model',
             'predict': 'a',
             'problem_definition': {
@@ -426,8 +425,7 @@ class Test(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- use TS predictor ---
-
-        predictor = {
+        # --- Implement necessary handlers for the TS predictor ---
             'name': 'task_model',
             'predict': 'a',
             'problem_definition': {
