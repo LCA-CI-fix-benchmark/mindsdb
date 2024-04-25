@@ -119,23 +119,22 @@ PACKAGE_NAME_MAP = {
 # so that when this is running in CI the job will fail
 success = True
 
+def check_for_errors(errors_dict):
+    global success
+    for file, errors in errors_dict.items():
+        if len(errors) > 0:
+            success = False
+            print_errors(file, errors)
 
 def print_errors(file, errors):
-    global success
-    if len(errors) > 0:
-        success = False
-        print(f"- {file}")
-        for line in errors:
-            print("    " + line)
-        print()
-
+    print(f"- {file}")
+    for line in errors:
+        print("    " + line)
+    print()
 
 def get_ignores_str(ignores_dict):
     """Get a list of rule ignores for deptry"""
-
     return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])
-
-
 def run_deptry(reqs, rule_ignores, path, extra_args=""):
     """Run a dependency check with deptry. Return a list of error messages"""
 
@@ -235,11 +234,10 @@ def check_relative_reqs():
                 errors.append(f"{line} <- Relative import of handler. Use absolute import instead")
 
             # Report on imports of other handlers that are missing a corresponding requirements.txt entry
-            for line, imported_handler_name in imported_handlers.items():
-                if imported_handler_name not in required_handlers:
-                    errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
-
-            # Print all of the errors for this .py file
+# Report on imports of other handlers that are missing a corresponding requirements.txt entry
+for line, imported_handler_name in imported_handlers.items():
+    if imported_handler_name not in required_handlers:
+        errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
             print_errors(file, errors)
 
         # Report on requirements.txt entries that point to a handler that isn't used
@@ -278,6 +276,7 @@ print("--- Checking requirements files for duplicates ---")
 check_for_requirements_duplicates()
 print()
 
+print("--- Checking that requirements match imports ---")
 print("--- Checking that requirements match imports ---")
 check_requirements_imports()
 print()
