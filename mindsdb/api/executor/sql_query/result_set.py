@@ -107,7 +107,6 @@ class ResultSet:
             col_names[name] = col
 
         return pd.DataFrame(self._records, columns=columns), col_names
-
     # --- tables ---
 
     def get_tables(self):
@@ -176,9 +175,13 @@ class ResultSet:
         return col_list
 
     def copy_column_to(self, col, result_set2):
+    def copy_column_to(self, col, result_set2):
         # copy with values
         idx = self._locate_column(col)
-
+        
+        if idx is None:
+            return None
+        
         values = [row[idx] for row in self._records]
 
         col2 = copy.deepcopy(col)
@@ -187,8 +190,6 @@ class ResultSet:
         return col2
 
     # --- records ---
-
-    def add_records(self, data):
         names = self.get_column_names()
         for rec in data:
             # if len(rec) != len(self._columns):

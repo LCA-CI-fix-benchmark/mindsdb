@@ -120,8 +120,12 @@ PACKAGE_NAME_MAP = {
 
 # We use this to exit with a non-zero status code if any check fails
 # so that when this is running in CI the job will fail
+import os
+
 success = True
 
+if os.getenv("CI"):
+    success = False
 
 def print_errors(file, errors):
     global success
@@ -132,13 +136,9 @@ def print_errors(file, errors):
             print("    " + line)
         print()
 
-
 def get_ignores_str(ignores_dict):
     """Get a list of rule ignores for deptry"""
-
     return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])
-
-
 def run_deptry(reqs, rule_ignores, path, extra_args=""):
     """Run a dependency check with deptry. Return a list of error messages"""
 
@@ -247,7 +247,7 @@ def check_relative_reqs():
             for line, imported_handler_name in imported_handlers.items():
                 if imported_handler_name not in required_handlers:
                     errors.append(
-                        f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
+                        f"Error: {line} - '{imported_handler_name}' is not in the handler requirements.txt. Please add it using: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
 
             # Print all the errors for this .py file
             print_errors(file, errors)
@@ -296,4 +296,7 @@ print()
 print("--- Checking handlers that require other handlers ---")
 check_relative_reqs()
 
-sys.exit(0 if success else 1)
+if os.getenv("CI"):
+    sys.exit(1 if not success else 0)
+else:
+    sys.exit(0 if success else 1)
