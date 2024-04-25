@@ -116,19 +116,14 @@ PACKAGE_NAME_MAP = {
 }
 
 # We use this to exit with a non-zero status code if any check fails
-# so that when this is running in CI the job will fail
-success = True
-
-
-def print_errors(file, errors):
-    global success
+def print_errors(file, errors) -> bool:
     if len(errors) > 0:
-        success = False
         print(f"- {file}")
         for line in errors:
             print("    " + line)
         print()
-
+        return False
+    return True
 
 def get_ignores_str(ignores_dict):
     """Get a list of rule ignores for deptry"""

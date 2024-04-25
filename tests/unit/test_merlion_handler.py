@@ -39,11 +39,9 @@ class TestMerlion(BaseExecutorTest):
         sequence.index = pd.date_range(start=0, periods=sequence.shape[0], freq="H")
         sequence = sequence.to_frame()
         metadata = pd.DataFrame({"trainval": sequence.index < sequence.index[ntrain]}, index=sequence.index)
-        train = sequence[metadata.trainval]
-        test = sequence[~metadata.trainval]
-        train["train"] = 1
-        test["train"] = 0
-        df = pd.concat([train, test], axis=0)
+train = train.assign(train=1)
+test = test.assign(train=0)
+df = pd.concat([train, test], axis=0)
         return df
 
     def get_nab_df(self) -> pd.DataFrame:
