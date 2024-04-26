@@ -617,7 +617,7 @@ class IntegrationController:
         # edge case: running from tests directory, find_spec finds the base folder instead of actual package
         if not os.path.isdir(handlers_path):
             mindsdb_path = Path(importlib.util.find_spec('mindsdb').origin).parent.joinpath('mindsdb')
-            handlers_path = mindsdb_path.joinpath('integrations/handlers')
+            handlers_path = os.path.join(mindsdb_path, 'integrations', 'handlers')
 
         self.handler_modules = {}
         self.handlers_import_status = {}

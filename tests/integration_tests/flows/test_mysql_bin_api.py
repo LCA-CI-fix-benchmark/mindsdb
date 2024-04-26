@@ -17,7 +17,7 @@ class TestMySqlBinApi(TestMySqlApi):
     This class inherits all tests from TestMySqlApi:
     -k 'not TestMySqlApi' is required for test launch.
     Otherwise inherited tests will be executed twice:
-    First one for TestMySqlApi, second one for TestMysqlBinApi
+    First one for TestMySqlApi, second one for TestMySqlBinApi
     In general all tests do next:
         1. Do some preconditions
         2. Specify SQL query needs to be executed

@@ -44,9 +44,9 @@ class Dlist(list):
 
 
 class BaseStuff:
-    """Contais some helpful set of methods and attributes for tests execution."""
+    """Contains some helpful set of methods and attributes for tests execution."""
     predictor_name = 'home_rentals'
-    file_datasource_name = "from_files"
+    file_data_source_name = "from_files"
 
     @staticmethod
     def to_dicts(response):

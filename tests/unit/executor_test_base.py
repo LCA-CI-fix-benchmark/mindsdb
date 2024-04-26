@@ -71,23 +71,25 @@ class BaseUnitTest:
             mp_patcher.side_effect = lambda x: dummy
 
     @staticmethod
+    @classmethod
     def teardown_class(cls):
-        # remove tmp db file
+        # Remove the temporary db file
         cls.db.session.close()
         os.unlink(cls.db_file)
 
-        # remove environ for next tests
-        del os.environ["MINDSDB_DB_CON"]
+        # Reset the environment variable for the next tests
+        os.environ.pop("MINDSDB_DB_CON", None)
 
-        # remove import of mindsdb for next tests
+        # Unload the mindsdb module for the next tests
         unload_module("mindsdb")
 
     def setup_method(self):
         self.clear_db(self.db)
 
     def clear_db(self, db):
-        # drop
+        # Rollback any open transactions
         db.session.rollback()
+        # Drop all tables in the database
         db.Base.metadata.drop_all(db.engine)
 
         # create

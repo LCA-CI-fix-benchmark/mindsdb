@@ -118,6 +118,20 @@ class TestStatsForecast(BaseExecutorTest):
         """This tests whether changing the model_name and frequency USING args
         will switch the actual model used.
         """
+        # Add assertions to test model choice based on model_name and frequency args
+        # Example:
+        # Set model_name and frequency using args
+        model_name = "new_model"
+        frequency = "daily"
+        
+        # Call the function or method that changes the model based on model_name and frequency
+        # Replace the function_call with the actual function call in your code
+        function_call(model_name, frequency)
+        
+        # Assert that the model has switched based on the new model_name and frequency
+        # Replace the assertions with your specific assertions based on your implementation
+        self.assertEqual(mock_handler.model_name, model_name)
+        self.assertEqual(mock_handler.frequency, frequency)
 
         # create project
         self.run_sql("create database proj")
