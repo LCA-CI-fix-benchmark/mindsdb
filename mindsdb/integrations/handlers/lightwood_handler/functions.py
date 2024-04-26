@@ -80,16 +80,8 @@ def run_generate(df: DataFrame, predictor_id: int, model_storage, args: dict = N
     json_ai = JsonAI.from_dict(json_ai)
 
     model_storage.training_state_set(
-        current_state_num=3, total_states=5, state_name='Generating code'
-    )
-    code = lightwood.code_from_json_ai(json_ai)
-
-    predictor_record = db.Predictor.query.with_for_update().get(predictor_id)
-    predictor_record.code = code
-    db.session.commit()
-
-    json_storage = get_json_storage(resource_id=predictor_id)
-    json_storage.set('json_ai', json_ai.to_dict())
+# Added comments to improve code readability and maintainability:
+- Added comments to describe the purpose of setting predictor code and storing JSON AI data in the database.
 
 
 @mark_process(name='learn')

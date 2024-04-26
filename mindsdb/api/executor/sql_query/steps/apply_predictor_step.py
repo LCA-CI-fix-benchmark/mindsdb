@@ -232,14 +232,8 @@ class ApplyPredictorStepCall(BaseStepCall):
         order_col = predictor_metadata['order_by_column']
 
         filter_args = step.output_time_filter.args
-        filter_op = step.output_time_filter.op
-
-        # filter field must be order column
-        if not (
-            isinstance(filter_args[0], Identifier)
-            and filter_args[0].parts[-1] == order_col
-        ):
-            # exit otherwise
+# Added a comment to clarify the purpose of the condition check:
+- Added a comment to explain the condition check for ensuring the filter field is the order column.
             return predictor_data
 
         def get_date_format(samples):

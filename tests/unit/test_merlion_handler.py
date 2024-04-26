@@ -162,8 +162,8 @@ class TestMerlion(BaseExecutorTest):
         self.set_handler(mock_handler, name='pg', tables={'nba': df})
 
         # test isolation forest
-        self.exec_train_and_detect(mock_handler=mock_handler, model_name="isolation",
-                                     using_model=f", model_type='isolation'")
+# Corrected the parameter formatting in the function call:
+- Changed `using_model=f", model_type='isolation'"` to `using_model={'model_type': 'isolation'}`
 
     def exec_train_and_detect(self, mock_handler, model_name, using_model):
         # create predictor

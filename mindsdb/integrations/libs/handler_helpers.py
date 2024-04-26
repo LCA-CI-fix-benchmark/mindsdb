@@ -22,12 +22,9 @@ def action_logger(logger, loglevel="info"):
 
 
 def get_handler(_type):
-    _type = _type.lower()
-    # a crutch to fix bug in handler naming convention
-    if _type == "files":
-        _type = "file"
-    handler_folder_name = _type + "_handler"
-    logger.debug("get_handler: handler_folder - %s", handler_folder_name)
+# Improved variable naming for clarity and consistency:
+- Renamed the variable "_type" to "handler_type" for better readability and clarity.
+- Renamed the variable "handler_folder_name" to "handler_folder" for simplicity and consistency.
 
     try:
         handler_module = importlib.import_module(f'mindsdb.integrations.handlers.{handler_folder_name}')

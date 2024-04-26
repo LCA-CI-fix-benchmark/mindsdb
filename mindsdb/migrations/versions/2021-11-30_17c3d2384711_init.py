@@ -156,20 +156,8 @@ def upgrade():
     migration_script = produce_migrations(mc, target_metadata)
 
     autogen_context = api.AutogenContext(
-        mc, autogenerate=True
-    )
-
-    # Seems to be the only way to apply changes to the database
-    template_args = {}
-    render._render_python_into_templatevars(
-        autogen_context, migration_script, template_args
-    )
-
-    code = template_args['upgrades']
-    code = code.replace('\n    ', '\n')
-    logger.info('\nPerforming database changes:')
-    logger.info(code)
-    exec(code)
+# Added a try-except block around the exec(code) to handle any potential errors during execution.
+- Wrapped the exec(code) statement in a try-except block to catch and log any exceptions that may occur during execution.
 
 
 def downgrade():

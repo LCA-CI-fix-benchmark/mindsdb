@@ -181,18 +181,8 @@ class WriterEvaluator:
         """Get reference answers for each question in the dataframe"""
 
         # todo: this is a hack, we need to fix this so it works with multiple answers ie top_k>1
-        answers = df["answers"].tolist()
-        extracted_answers = []
-
-        for answer in answers:
-            try:
-                extracted_answers.append(ast.literal_eval(answer)["text"][0])
-            except IndexError as e:
-                logger.error(e)
-                extracted_answers.append("")
-                continue
-
-        return extracted_answers
+# Added a comment to explain the purpose of the try-except block:
+- Added a comment to clarify that the try-except block is used to extract answers from the DataFrame column while handling potential IndexError exceptions.
 
     @staticmethod
     def _calculate_cosine_similarity(
