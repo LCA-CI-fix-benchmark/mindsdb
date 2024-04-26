@@ -11,27 +11,7 @@ from mindsdb.utilities import log
 from mindsdb.integrations.libs.response import HandlerResponse, HandlerStatusResponse
 
 logger = log.getLogger(__name__)
-
-
-class BaseHandler:
-    """ Base class for database handlers
-
-    Base class for handlers that associate a source of information with the
-    broader MindsDB ecosystem via SQL commands.
-    """
-
-    def __init__(self, name: str):
-        """ constructor
-        Args:
-            name (str): the handler name
-        """
-        self.is_connected: bool = False
-        self.name = name
-
-    def connect(self):
-        """ Set up any connections required by the handler
-
-        Should return connection
+    Should return connection:
 
         """
         raise NotImplementedError()
@@ -105,33 +85,12 @@ class BaseHandler:
 
 
 class DatabaseHandler(BaseHandler):
-    """
-    Base class for handlers associated to data storage systems (e.g. databases, data warehouses, streaming services, etc.)
-    """
-
-    def __init__(self, name: str):
-        super().__init__(name)
-
-
-class PredictiveHandler(BaseHandler):
-    """
-    DEPRECATED. Please refer to BaseMLEngine for integrations with machine learning frameworks.
-
-    Base class for handlers associated to predictive systems.
-    """
-
-    def __init__(self, name: str):
-        super().__init__(name)
-
-
-class ArgProbeMixin:
-    """
-    A mixin class that provides probing of arguments that
-    are needed by a handler during creation and prediction time
-    by running the static analysis on the source code of the handler.
-    """
-
-    class ArgProbeVisitor(ast.NodeVisitor):
+        Returns:
+            HandlerResponse: should have same columns as information_schema.columns
+                (https://dev.mysql.com/doc/refman/8.0/en/information-schema-columns-table.html)
+                Column 'COLUMN_NAME' is mandatory, other is optional. Highly
+                recommended to define also 'DATA_TYPE': it should be one of
+                python data types (by default it str).
         def __init__(self):
             self.arg_keys = []
             self.var_names_to_track = {"args"}

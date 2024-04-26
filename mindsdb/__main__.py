@@ -212,17 +212,6 @@ if __name__ == '__main__':
     logger.debug(f"User config: {user_config}")
 
     for (
-        handler_name,
-        handler_meta,
-    ) in integration_controller.get_handlers_import_status().items():
-        import_meta = handler_meta.get("import", {})
-        if import_meta.get("success", False) is not True:
-            logger.info(
-                dedent(
-                    """
-                Some handlers cannot be imported. You can check list of available handlers by execute command in sql editor:
-                    select * from information_schema.handlers;
-            """
                 )
             )
             break

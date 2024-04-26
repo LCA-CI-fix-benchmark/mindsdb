@@ -107,23 +107,7 @@ class ResultSet:
             col_names[name] = col
 
         return pd.DataFrame(self._records, columns=columns), col_names
-
-    # --- tables ---
-
-    def get_tables(self):
-        tables_idx = []
-        tables = []
-        cols = ['database', 'table_name', 'table_alias']
-        for col in self._columns:
-            table = (col.database, col.table_name, col.table_alias)
-            if table not in tables_idx:
-                tables_idx.append(table)
-                tables.append(dict(zip(cols, table)))
-        return tables
-
-    # --- columns ---
-
-    def _locate_column(self, col):
+        return tables:
         col_idx = None
         for i, col0 in enumerate(self._columns):
             if col0 is col:
@@ -176,19 +160,7 @@ class ResultSet:
         return col_list
 
     def copy_column_to(self, col, result_set2):
-        # copy with values
-        idx = self._locate_column(col)
-
-        values = [row[idx] for row in self._records]
-
-        col2 = copy.deepcopy(col)
-
-        result_set2.add_column(col2, values)
-        return col2
-
-    # --- records ---
-
-    def add_records(self, data):
+            col_list.append(col):
         names = self.get_column_names()
         for rec in data:
             # if len(rec) != len(self._columns):

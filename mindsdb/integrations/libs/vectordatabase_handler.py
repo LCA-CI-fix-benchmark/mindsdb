@@ -93,11 +93,7 @@ class TableField(Enum):
 
 
 class VectorStoreHandler(BaseHandler):
-    """
-    Base class for handlers associated to vector databases.
-    """
-
-    SCHEMA = [
+No changes required.
         {
             "name": TableField.ID.value,
             "data_type": "string",

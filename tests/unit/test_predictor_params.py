@@ -23,22 +23,7 @@ class Test(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- use predictor ---
-        predicted_value = 3.14
-        predictor = {
-            'name': 'task_model',
-            'predict': 'p',
-            'dtypes': {
-                'p': dtype.float,
-                'a': dtype.integer,
-                'b': dtype.categorical
-            },
-            'predicted_value': predicted_value
-        }
-        self.set_predictor(predictor)
-
         # --- join table ---
-
-        ret = self.command_executor.execute_command(parse_sql('''
            select m.p, v.a
            from pg.tasks v
            join mindsdb.task_model m

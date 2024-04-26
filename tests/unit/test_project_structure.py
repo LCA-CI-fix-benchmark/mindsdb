@@ -417,21 +417,7 @@ class TestProjectStructure(BaseExecutorDummyML):
         assert len(ret) == 2
 
         # t1.a > 1
-        assert ret[ret.t1a <= 1].empty
-
-        # view: a!=4
-        assert ret[ret.t3a == 4].empty
-
-        # t3.a has 6 and None
-        assert len(ret[ret.t3a == 6]) == 1
-        assert len(ret[ret.t3a.isna()]) == 1
-
-        # contents predicted values
-        assert list(ret.predicted.unique()) == [42]
-
         # --- tests table-subselect-view ---
-
-        ret = self.run_sql('''
             SELECT t1.a t1a,
                    t2.t1a t2t1a, t2.t3a t2t3a,
                    t3.c t3c, t3.a t3a

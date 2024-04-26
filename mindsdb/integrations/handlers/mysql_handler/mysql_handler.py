@@ -1,15 +1,5 @@
 """
-This is the MySQL integration handler for mindsdb.  It provides the routines
-which provide for interacting with the database.
-
-MindsDB currently does not appear to multiple round trip transactions. This
-makes sense given the niche that the project fulfills.  If this changes, most
-handlers will require modification.  Here we would need a context manager for
-handling transactions.  This would be safer than explicit commits since errors
-would result in rolling back automatically.
-"""
-
-from collections import OrderedDict
+No changes required.
 
 import pandas as pd
 import mysql.connector
