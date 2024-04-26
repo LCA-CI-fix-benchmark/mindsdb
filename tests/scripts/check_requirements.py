@@ -121,14 +121,13 @@ success = True
 
 
 def print_errors(file, errors):
-    global success
     if len(errors) > 0:
-        success = False
         print(f"- {file}")
         for line in errors:
             print("    " + line)
         print()
-
+        return False
+    return True
 
 def get_ignores_str(ignores_dict):
     """Get a list of rule ignores for deptry"""

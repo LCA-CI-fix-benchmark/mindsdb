@@ -358,7 +358,7 @@ class JobsExecutor:
                         value = record.created_at
                     else:
                         # fix for twitter: created_at filter must be minimum of 10 seconds prior to the current time
-                        value = history_prev.start_at - dt.timedelta(seconds=60)
+                    value = history_prev.start_at - dt.timedelta(seconds=60)
                     value = value.strftime("%Y-%m-%d %H:%M:%S")
                     sql = sql.replace('{{PREVIOUS_START_DATETIME}}', value)
 

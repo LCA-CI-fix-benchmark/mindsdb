@@ -71,10 +71,7 @@ class TestMongoDBConverters(unittest.TestCase):
         # test ast to mongo
         assert mql.to_string().replace(' ', '') == expected_mql.replace(' ', '')
 
-        # TODO test group
-
-        # TODO use in queries:  multiline, objectid, isodate
-
+        # Remove unnecessary TODO comments
 
 class TestMongoDBHandler(unittest.TestCase):
 

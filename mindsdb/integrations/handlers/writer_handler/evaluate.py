@@ -143,9 +143,9 @@ class WriterEvaluator:
 
     @staticmethod
     def extract_returned_text(vector_store_response: List) -> List:
-        # todo: this is a hack, we need to fix this so it works with multiple context ie top_k>1
-        # todo handle empty response
-        return [doc.page_content for doc in vector_store_response][0]
+        # Improve handling for multiple context (top_k>1) in the future
+        # Handle empty response by returning an empty list if vector_store_response is empty
+        return [doc.page_content for doc in vector_store_response][0] if vector_store_response else []
 
     def evaluation_prompt(self, question: str, context: str):
         """Create prompt for evaluating RAG"""
@@ -187,8 +187,8 @@ class WriterEvaluator:
         for answer in answers:
             try:
                 extracted_answers.append(ast.literal_eval(answer)["text"][0])
-            except IndexError as e:
-                logger.error(e)
+            except KeyError as e:
+                logger.error(f"Key 'text' not found: {e}")
                 extracted_answers.append("")
                 continue
 

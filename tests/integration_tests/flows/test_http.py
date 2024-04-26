@@ -185,7 +185,8 @@ class TestHTTP(HTTPHelperMixin):
             assert response.status_code == 200
 
     def test_sql_general_syntax(self):
-        ''' test sql in general
+        '''
+        Test SQL queries in general scenarios.
         '''
         select_const_int = [
             'select 1',

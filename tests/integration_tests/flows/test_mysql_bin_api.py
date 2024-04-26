@@ -12,14 +12,14 @@ API_LIST = ["http", "mysql"]
 
 @pytest.mark.usefixtures("mindsdb_app")
 class TestMySqlBinApi(TestMySqlApi):
-    """Test mindsdb mysql api.
-    All sql commands are being executed through binary mode of mysql protocol.
-    This class inherits all tests from TestMySqlApi:
-    -k 'not TestMySqlApi' is required for test launch.
-    Otherwise inherited tests will be executed twice:
-    First one for TestMySqlApi, second one for TestMysqlBinApi
-    In general all tests do next:
-        1. Do some preconditions
+    """
+    Test mindsdb MySQL API.
+    All SQL commands are executed through the binary mode of the MySQL protocol.
+    This class inherits all tests from TestMySqlApi.
+    Use '-k 'not TestMySqlApi' for test launch to prevent duplicate execution of inherited tests.
+    In general, all tests perform the following steps:
+        1. Perform some preconditions
+    """
         2. Specify SQL query needs to be executed
         3. Send the query to a Mindsdb app in binary mode and execute the query"""
 

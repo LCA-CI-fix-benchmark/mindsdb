@@ -463,7 +463,11 @@ class LightwoodHandler(BaseMLEngine):
         db.session.commit()
 
         json_storage = get_json_storage(resource_id=predictor_record.id)
-        json_storage.delete('json_ai')
+        try:
+            json_storage.delete('json_ai')
+        except Exception as e:
+            # Handle the exception here, e.g., log the error or take appropriate action
+            print(f"Error deleting 'json_ai': {e}")
 
     def _get_features_info(self):
         ai_info = self.model_storage.json_get('json_ai')

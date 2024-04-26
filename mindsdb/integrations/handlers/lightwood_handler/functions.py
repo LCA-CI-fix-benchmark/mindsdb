@@ -88,7 +88,7 @@ def run_generate(df: DataFrame, predictor_id: int, model_storage, args: dict = N
     predictor_record.code = code
     db.session.commit()
 
-    json_storage = get_json_storage(resource_id=predictor_id)
+    json_storage = get_json_storage(resource_id=predictor_record.id)
     json_storage.set('json_ai', json_ai.to_dict())
 
 

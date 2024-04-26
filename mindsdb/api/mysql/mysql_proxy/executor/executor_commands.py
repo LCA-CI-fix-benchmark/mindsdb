@@ -2050,10 +2050,10 @@ class ExecuteCommands:
         return ExecuteAnswer(ANSWER_TYPE.OK)
 
     def change_default_db(self, db_name):
-        # That fix for bug in mssql: it keeps connection for a long time, but after some time mssql can
-        # send packet with COM_INIT_DB=null. In this case keep old database name as default.
+        # Fix for a bug in MSSQL: it keeps the connection for a long time, but after some time MSSQL can
+        # send a packet with COM_INIT_DB=null. In this case, keep the old database name as default.
         if db_name != "null":
             if self.session.database_controller.exists(db_name):
                 self.session.database = db_name
             else:
-                raise ErBadDbError(f"Database {db_name} does not exists")
+                raise ErBadDbError(f"Database {db_name} does not exist")

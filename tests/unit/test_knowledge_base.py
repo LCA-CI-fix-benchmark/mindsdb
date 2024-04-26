@@ -180,7 +180,6 @@ class TestKnowledgeBase(BaseExecutorTest):
         """
 
         self.run_sql(sql)
-
         # verify the knowledge base is created
         kb_obj = self.db.session.query(KnowledgeBase).filter_by(name="test_kb6").first()
         assert kb_obj is not None
