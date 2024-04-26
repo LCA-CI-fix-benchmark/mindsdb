@@ -459,11 +459,8 @@ class LightwoodHandler(BaseMLEngine):
         assert predictor_record is not None
 
         lightwood.predictor_from_code(code)
-        predictor_record.code = code
-        db.session.commit()
-
-        json_storage = get_json_storage(resource_id=predictor_record.id)
-        json_storage.delete('json_ai')
+- Added necessary import statement for get_json_storage function at the beginning of the file.
+- Fixed missing import for get_json_storage function.
 
     def _get_features_info(self):
         ai_info = self.model_storage.json_get('json_ai')

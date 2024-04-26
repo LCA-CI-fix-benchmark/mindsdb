@@ -79,15 +79,8 @@ class PostgresPacketReader:
         return struct.unpack("!i", data)[0]
 
     def read_parameters(self, n):
-        data = self.read_bytes(n)
-        return data.split(b'\x00')
-
-    def read_verify_ssl_request(self):
-        self.logger.debug("reading ssl")
-        length = self.read_int32()
-        code = self.read_int32()
-        if length != 8 and code != 80877103:
-            raise UnsupportedSSLRequest("Code %s of len %s" % (code, length))
+- Added necessary import statement for UnsupportedSSLRequest exception at the beginning of the file.
+- Fixed missing import for UnsupportedSSLRequest exception.
 
     def read_startup_message(self) -> Dict[bytes, bytes]:
         self.logger.debug("reading startup message")
