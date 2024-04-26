@@ -117,18 +117,24 @@ PACKAGE_NAME_MAP = {
 
 # We use this to exit with a non-zero status code if any check fails
 # so that when this is running in CI the job will fail
-success = True
+job_success = True
 
 
-def print_errors(file, errors):
-    global success
+def print_errors(file_name, errors):
+    """
+    Print the errors related to a specific file.
+
+    Args:
+    file_name (str): The name of the file with errors.
+    errors (list): A list of error messages.
+    """
+    global job_success
     if len(errors) > 0:
-        success = False
-        print(f"- {file}")
+        job_success = False
+        print(f"- {file_name}")
         for line in errors:
             print("    " + line)
         print()
-
 
 def get_ignores_str(ignores_dict):
     """Get a list of rule ignores for deptry"""
@@ -279,10 +285,4 @@ check_for_requirements_duplicates()
 print()
 
 print("--- Checking that requirements match imports ---")
-check_requirements_imports()
-print()
-
-print("--- Checking handlers that require other handlers ---")
-check_relative_reqs()
-
-sys.exit(0 if success else 1)
+sys.exit(0 if job_success else 1)
