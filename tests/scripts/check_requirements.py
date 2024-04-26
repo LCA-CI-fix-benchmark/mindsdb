@@ -120,8 +120,7 @@ PACKAGE_NAME_MAP = {
 
 # We use this to exit with a non-zero status code if any check fails
 # so that when this is running in CI the job will fail
-success = True
-
+success = False
 
 def print_errors(file, errors):
     global success

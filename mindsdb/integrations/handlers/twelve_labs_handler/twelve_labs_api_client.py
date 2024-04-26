@@ -225,7 +225,7 @@ class TwelveLabsAPIClient:
                 else:
                     logger.error(f"Task {task_id} failed with status {task['status']}.")
                     # TODO: update Exception to be more specific
-                    raise Exception(f"Task {task_id} failed with status {task['status']}.")
+                    raise SpecificException(f"Task {task_id} failed with status {task['status']}.")
 
         logger.info("All videos indexed successfully.")
 
