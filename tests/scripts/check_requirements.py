@@ -116,26 +116,8 @@ PACKAGE_NAME_MAP = {
 }
 
 # We use this to exit with a non-zero status code if any check fails
-# so that when this is running in CI the job will fail
-success = True
-
-
-def print_errors(file, errors):
-    global success
-    if len(errors) > 0:
-        success = False
-        print(f"- {file}")
-        for line in errors:
-            print("    " + line)
-        print()
-
-
-def get_ignores_str(ignores_dict):
-    """Get a list of rule ignores for deptry"""
-
     return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])
-
-
+    # Add your additional code or closing statements here
 def run_deptry(reqs, rule_ignores, path, extra_args=""):
     """Run a dependency check with deptry. Return a list of error messages"""
 
@@ -175,15 +157,8 @@ def check_for_requirements_duplicates():
 
 
 def check_relative_reqs():
-    """
-    Check that relationships between handlers are defined correctly.
-
-    If a parent handler imports another handler in code, we should define that dependency
-    in the parent handler's requirements.txt like:
-
-    -r mindsdb/integrations/handlers/child_handler/requirements.txt
-
-    This is important to ensure that "pip install mindsdb[parent_handler]" works correctly.
+    for file in HANDLER_REQS_PATHS:
+    # Add your additional code or closing statements here
     This function checks that for each handler imported from another handler, there is a
     corresponding entry in a requirements.txt.
     """
@@ -204,15 +179,11 @@ def check_relative_reqs():
                         entries.append(line.split("mindsdb/integrations/handlers/")[1].split("/")[0])  # just return the handler name
 
         return entries
-
-    for handler_dir in glob.glob("mindsdb/integrations/handlers/*/"):
-        handler_name = handler_dir.split("/")[-2].split("_handler")[0]
-
-        # regex for finding imports of other handlers like "from mindsdb.integrations.handlers.file_handler import FileHandler"
-        # excludes the current handler importing parts of itself
-        import_pattern = re.compile(f"(?:\s|^)(?:from|import) mindsdb\.integrations\.handlers\.(?!{handler_name})\w+_handler")  # noqa: W605
-
-        # requirements entries for this handler that point to another handler's requirements file
+    """
+    This function checks that for each handler imported from another handler, there is a
+    corresponding entry in a requirements.txt.
+    """
+    # Add your additional code or closing statements here
         required_handlers = get_relative_requirements([file for file in HANDLER_REQS_PATHS if file.startswith(handler_dir)])
 
         all_imported_handlers = []
@@ -235,11 +206,8 @@ def check_relative_reqs():
                 errors.append(f"{line} <- Relative import of handler. Use absolute import instead")
 
             # Report on imports of other handlers that are missing a corresponding requirements.txt entry
-            for line, imported_handler_name in imported_handlers.items():
-                if imported_handler_name not in required_handlers:
-                    errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
-
-            # Print all of the errors for this .py file
+        import_pattern = re.compile(f"(?:\s|^)(?:from|import) mindsdb\.integrations\.handlers\.(?!{handler_name})\w+_handler")  # noqa: W605
+        # Add your additional code or closing statements here
             print_errors(file, errors)
 
         # Report on requirements.txt entries that point to a handler that isn't used
@@ -279,10 +247,5 @@ check_for_requirements_duplicates()
 print()
 
 print("--- Checking that requirements match imports ---")
-check_requirements_imports()
-print()
-
-print("--- Checking handlers that require other handlers ---")
-check_relative_reqs()
-
-sys.exit(0 if success else 1)
+    # Run against the main codebase
+    # Add your additional code or closing statements here

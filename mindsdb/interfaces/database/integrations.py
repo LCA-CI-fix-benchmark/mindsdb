@@ -130,17 +130,8 @@ class HandlersCache:
                 self._stop_clean()
 
     def _clean(self) -> None:
-        """ worker that delete from cache handlers that was not in use for ttl
-        """
-        while self._stop_event.wait(timeout=3) is False:
-            with self._lock:
-                for key in list(self.handlers.keys()):
-                    if (
-                        self.handlers[key]['expired_at'] < time()
-                        and sys.getrefcount(self.handlers[key]) == 2    # returned ref count is always 1 higher
-                    ):
-                        try:
                             self.handlers[key].disconnect()
+                            # Add your additional code or closing statements here
                         except Exception:
                             pass
                         del self.handlers[key]

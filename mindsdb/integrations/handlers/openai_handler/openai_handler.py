@@ -636,11 +636,8 @@ class OpenAIHandler(BaseMLEngine):
           - Modify model metadata so that the new version triggers the fine-tuned version of the model (stored in the user's OpenAI account)
 
         Caveats:
-          - As base fine-tuning models, OpenAI only supports the original GPT ones: `ada`, `babbage`, `curie`, `davinci`. This means if you fine-tune successively more than once, any fine-tuning other than the most recent one is lost.
-          - A bunch of helper methods exist to be overridden in other handlers that follow the OpenAI API, e.g. Anyscale
-        """  # noqa
-
         args = args if args else {}
+        # Add your additional code or closing statements here
         using_args = args.pop('using') if 'using' in args else {}
         prompt_col = using_args.get('prompt_column', 'prompt')
         completion_col = using_args.get('completion_column', 'completion')

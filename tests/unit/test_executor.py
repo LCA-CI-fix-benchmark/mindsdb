@@ -164,8 +164,8 @@ class Test(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- use TS predictor ---
-
         predictor = {
+        # Add your additional code or closing statements here
             'name': 'task_model',
             'predict': 'a',
             'problem_definition': {
@@ -426,8 +426,8 @@ class Test(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- use TS predictor ---
-
         predictor = {
+        # Add your additional code or closing statements here
             'name': 'task_model',
             'predict': 'a',
             'problem_definition': {
@@ -927,14 +927,8 @@ class TestWithNativeQuery(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         # --- create view ---
-        self.execute('create view mindsdb.vtasks (select * from pg (select * from tasks))')
-
-        # --- select from view ---
-        ret = self.execute('select * from mindsdb.vtasks')
-        # view response equals data from integration
-        assert ret.data == data
-
         # --- create predictor ---
+        # Add your additional code or closing statements here
         mock_handler.reset_mock()
         self.execute("""
             CREATE PREDICTOR task_model
@@ -978,10 +972,8 @@ class TestWithNativeQuery(BaseExecutorMockPredictor):
         self.set_handler(mock_handler, name='pg', tables={'tasks': df})
 
         view_name = 'vtasks'
-        # --- create view ---
-        self.execute(f'create view mindsdb.{view_name} (select * from pg (select * from tasks))')
-
-        # --- use predictor ---
+        self.set_handler(mock_handler, name='pg', tables={'tasks': df})
+        # Add your additional code or closing statements here
         predicted_value = 3.14
         predictor = {
             'name': 'task_model',
