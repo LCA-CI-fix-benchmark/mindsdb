@@ -335,6 +335,8 @@ class TestMilvusHandler(BaseExecutorTest):
             SELECT * FROM milvus_test.testable
             WHERE test = 'test2'
         """
+        updated_data = self.run_sql(sql)
+        assert len(updated_data) > 0  # Add assertion to verify updated data
         ret = self.run_sql(sql)
         assert ret.shape[0] == 2
 

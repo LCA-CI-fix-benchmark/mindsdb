@@ -80,8 +80,10 @@ class TestMongoDBHandler(unittest.TestCase):
 
     def test_mongo_handler(self):
 
-        # TODO how to test mongo handler
-        #   test mysql query
-        #   test mongo query
+        # Test MySQL query
+        # TODO: Implement test cases for MySQL queries
+
+        # Test MongoDB query
+        # TODO: Implement test cases for MongoDB queries
         pass
 

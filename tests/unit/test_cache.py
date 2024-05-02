@@ -74,7 +74,7 @@ class TestCashe(unittest.TestCase):
         # test delete
         cache.delete(name)
 
-        df2 = cache.get(name)
+        df2 = cache.get_df(name)
         assert df2 is None
 
         # test max_size
