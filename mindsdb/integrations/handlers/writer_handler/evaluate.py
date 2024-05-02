@@ -187,11 +187,9 @@ class WriterEvaluator:
         for answer in answers:
             try:
                 extracted_answers.append(ast.literal_eval(answer)["text"][0])
-            except IndexError as e:
-                logger.error(e)
+            except IndexError:
                 extracted_answers.append("")
                 continue
-
         return extracted_answers
 
     @staticmethod

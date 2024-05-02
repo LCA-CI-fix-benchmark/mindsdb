@@ -70,7 +70,7 @@ class BaseUnitTest:
             mp_patcher = mock.patch("multiprocessing.get_context").__enter__()
             mp_patcher.side_effect = lambda x: dummy
 
-    @staticmethod
+    @classmethod
     def teardown_class(cls):
         # remove tmp db file
         cls.db.session.close()

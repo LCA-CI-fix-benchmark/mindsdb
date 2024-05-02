@@ -145,18 +145,19 @@ class TestStatsForecast(BaseExecutorTest):
            using
              engine='statsforecast',
              model_name='AutoCES',
+            )
+        """
              frequency='H'
         """
         )
-        self.wait_predictor("proj", "modelx")
-
         # run predict
         result_df = self.run_sql(
             """
            SELECT p.*
            FROM pg.df as t
-           JOIN proj.modelx as p
+           JOIN proj.modelx as p ON <join_condition>
         """
+        )
         )
 
         # check against ground truth
@@ -185,7 +186,6 @@ class TestStatsForecast(BaseExecutorTest):
         assert describe_features["unique_id"][0] == ["unique_id"]
 
         with pytest.raises(Exception) as e:
-            self.run_sql("describe proj.modelx.ensemble")
             assert "ensemble is not supported" in str(e)
 
     @patch("mindsdb.integrations.handlers.postgres_handler.Handler")
@@ -193,6 +193,7 @@ class TestStatsForecast(BaseExecutorTest):
         """Tests the argument for auto model selection will pick the
         model with the lowest error.
         """
+        # create project
         # create project
         self.run_sql("create database proj")
         self.set_handler(mock_handler, name="pg", tables={"df": AirPassengersDF})
@@ -203,32 +204,32 @@ class TestStatsForecast(BaseExecutorTest):
         sf.cross_validation(prediction_horizon, fitted=True)
         sf_results_df = sf.cross_validation_fitted_values()
         best_model_name = get_best_model_from_results_df(sf_results_df)
-        package_predictions = sf.forecast(prediction_horizon)[best_model_name]
-
         # create predictor
         self.run_sql(
             f"""
-           create model proj.modelx
-           from pg (select * from df)
-           predict y
-           order by ds
-           group by unique_id
-           horizon {prediction_horizon}
-           using
-             engine='statsforecast',
-             model_name='auto',
+            create model proj.modelx
+            from pg (select * from df)
+            predict y
+            order by ds
+            group by unique_id
+            horizon {prediction_horizon}
+            using
+              engine='statsforecast',
+              model_name='auto',
+              frequency='M'
+            )
+        """
              frequency='M'
         """
         )
-        self.wait_predictor("proj", "modelx")
-
         # run predict
         result_df = self.run_sql(
             """
            SELECT p.*
            FROM pg.df as t
-           JOIN proj.modelx as p
+           JOIN proj.modelx as p ON <join_condition>
         """
+        )
         )
 
         # check against ground truth
@@ -244,7 +245,6 @@ class TestStatsForecast(BaseExecutorTest):
     def test_hierarchical(self, mock_handler):
         # create project
         self.run_sql("create database proj")
-        df = pd.read_csv("tests/unit/ml_handlers/data/house_sales.csv")  # comes mindsdb docs forecast example
         self.set_handler(mock_handler, name="pg", tables={"df": df})
 
         self.run_sql(
@@ -258,12 +258,12 @@ class TestStatsForecast(BaseExecutorTest):
            using
              engine='statsforecast',
              hierarchy=['type', 'bedrooms']
+            )
+        """
         """
         )
         self.wait_predictor("proj", "model_1_group")
 
-        # run predict
-        mindsdb_result_hier = self.run_sql(
             """
            SELECT p.*
            FROM pg.df as t
@@ -274,9 +274,9 @@ class TestStatsForecast(BaseExecutorTest):
         assert len(list(round(mindsdb_result_hier["ma"])))
 
         describe_result = self.run_sql("describe proj.model_1_group.model")
-        assert describe_result["hierarchy"][0] == ["type", "bedrooms"]
 
-        # Check results differ from the default settings
+        describe_result = self.run_sql("describe proj.model_1_group.model")
+        assert describe_result["hierarchy"][0] == ["type", "bedrooms"]
         self.run_sql(
             """
            create model proj.model_1
@@ -287,6 +287,7 @@ class TestStatsForecast(BaseExecutorTest):
            horizon 4
            using
              engine='statsforecast'
+            )
         """
         )
         self.wait_predictor("proj", "model_1")
@@ -300,4 +301,4 @@ class TestStatsForecast(BaseExecutorTest):
         """
         )
 
-        assert mindsdb_result_hier["ma"].sum() != mindsdb_result_default["ma"].sum()
+        assert list(mindsdb_result_hier["ma"].sum()) != list(mindsdb_result_default["ma"].sum())

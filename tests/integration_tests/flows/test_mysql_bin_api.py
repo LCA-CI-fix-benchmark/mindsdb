@@ -9,23 +9,21 @@ from .test_mysql_api import TestMySqlApi, Dlist
 # used by (required for) mindsdb_app fixture in conftest
 API_LIST = ["http", "mysql"]
 
+import mysql.connector
 
 @pytest.mark.usefixtures("mindsdb_app")
 class TestMySqlBinApi(TestMySqlApi):
-    """Test mindsdb mysql api.
-    All sql commands are being executed through binary mode of mysql protocol.
+    """Test MindsDB MySQL API using binary mode of MySQL protocol.
     This class inherits all tests from TestMySqlApi:
     -k 'not TestMySqlApi' is required for test launch.
     Otherwise inherited tests will be executed twice:
     First one for TestMySqlApi, second one for TestMysqlBinApi
-    In general all tests do next:
+    In general, all tests do the following:
         1. Do some preconditions
         2. Specify SQL query needs to be executed
-        3. Send the query to a Mindsdb app in binary mode and execute the query"""
-
+        3. Send the query to a MindsDB app in binary mode and execute the query"""
 
     def query(self, _query, encoding='utf-8'):
-
         cnx = mysql.connector.connect(
             host=self.config["api"]["mysql"]["host"],
             port=self.config["api"]["mysql"]["port"],
@@ -54,7 +52,7 @@ class TestMySqlBinApi(TestMySqlApi):
 
         return res
 
-    def test_tableau_queries(self, subtests):
+    def test_tableau_queries(self, subtests, _query):
         test_ds_name = self.file_datasource_name
         predictor_name = "predictor_from_file"
         integration = "files"
