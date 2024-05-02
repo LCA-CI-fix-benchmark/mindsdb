@@ -263,6 +263,12 @@ def test_get_file_path_with_url(mock_fetch_url):
     url = "http://example.com/file.txt"
     expected_result = "some_file_path"
     # we test _fetch_url separately below. Mock it for this test
+    
+    # Call the mock_fetch_url function
+    result = mock_fetch_url(url)
+    
+    # Assert the result with the expected value
+    assert result == expected_result
     mock_fetch_url.return_value = expected_result
 
     result = FileHandler._get_file_path(url)

@@ -115,7 +115,13 @@ def _setup_standard_tools(tools, llm, executor, model_kwargs):
             mdb_write_tool = Tool(
                 name="MDB-Write",
                 func=get_mdb_write_tool(executor),
-                description="useful to write into data sources connected to mindsdb. command must be a valid SQL query with syntax: `INSERT INTO data_source_name.table_name (column_name_1, column_name_2, [...]) VALUES (column_1_value_row_1, column_2_value_row_1, [...]), (column_1_value_row_2, column_2_value_row_2, [...]), [...];`. note the command always ends with a semicolon. order of column names and values for each row must be a perfect match. If write fails, try casting value with a function, passing the value without quotes, or truncating string as needed.`."  # noqa
+description = (
+    "Useful to write into data sources connected to mindsdb. The command must be a valid SQL query with the following syntax: "
+    "`INSERT INTO data_source_name.table_name (column_name_1, column_name_2, [...]) "
+    "VALUES (column_1_value_row_1, column_2_value_row_1, [...]), (column_1_value_row_2, column_2_value_row_2, [...]), [...];`. "
+    "Note that the command always ends with a semicolon. The order of column names and values for each row must be a perfect match. "
+    "If the write fails, try casting the value with a function, passing the value without quotes, or truncating the string as needed."
+)
             )
             all_standard_tools.append(mdb_write_tool)
         else:
