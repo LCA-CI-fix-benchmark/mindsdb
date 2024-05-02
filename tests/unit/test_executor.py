@@ -1088,7 +1088,7 @@ class TestWithNativeQuery(BaseExecutorMockPredictor):
 class TestSteps(BaseExecutorMockPredictor):
 
     @patch('mindsdb.integrations.handlers.postgres_handler.Handler')
-    def disabled_test_join_2_tables(self, mock_handler):
+    def test_join_2_tables(self, mock_handler):
         # tests for FilterStep and limitoffsetStep
         # disabled: current JoinStep is not supporting join with condition
 

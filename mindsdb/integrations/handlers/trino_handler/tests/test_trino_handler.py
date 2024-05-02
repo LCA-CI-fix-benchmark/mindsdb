@@ -41,8 +41,8 @@ class TrinoHandlerTest(unittest.TestCase):
         assert described['type'] is not RESPONSE_TYPE.ERROR
 
     # TODO: complete tests implementation
-    # def test_4_select_query(self):
-    #     query = "SELECT * FROM data.test_mdb WHERE 'id'='1'"
-    #     result = self.handler.query(query)
-    #     assert result['type'] is RESPONSE_TYPE.TABLE
+    def test_4_select_query(self):
+        query = "SELECT * FROM data.test_mdb WHERE 'id'='1'"
+        result = self.handler.query(query)
+        assert result['type'] is RESPONSE_TYPE.TABLE
     #

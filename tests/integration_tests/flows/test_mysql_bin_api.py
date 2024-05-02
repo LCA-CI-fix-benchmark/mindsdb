@@ -9,10 +9,9 @@ from .test_mysql_api import TestMySqlApi, Dlist
 # used by (required for) mindsdb_app fixture in conftest
 API_LIST = ["http", "mysql"]
 
-
 @pytest.mark.usefixtures("mindsdb_app")
 class TestMySqlBinApi(TestMySqlApi):
-    """Test mindsdb mysql api.
+    """Test mindsdb mysql api."""
     All sql commands are being executed through binary mode of mysql protocol.
     This class inherits all tests from TestMySqlApi:
     -k 'not TestMySqlApi' is required for test launch.

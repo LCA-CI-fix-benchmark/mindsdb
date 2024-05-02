@@ -115,6 +115,7 @@ PACKAGE_NAME_MAP = {
     "python-magic": ["magic"],
     "clickhouse-sqlalchemy": ["clickhouse_sqlalchemy"],
     "pillow": ["PIL"],
+{
     "auto-ts": ["auto_ts"],
 }
 
@@ -122,9 +123,9 @@ PACKAGE_NAME_MAP = {
 # so that when this is running in CI the job will fail
 success = True
 
-
 def print_errors(file, errors):
     global success
+}
     if len(errors) > 0:
         success = False
         print(f"- {file}")

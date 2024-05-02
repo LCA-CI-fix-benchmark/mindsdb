@@ -70,11 +70,11 @@ class BaseUnitTest:
             mp_patcher = mock.patch("multiprocessing.get_context").__enter__()
             mp_patcher.side_effect = lambda x: dummy
 
-    @staticmethod
-    def teardown_class(cls):
+    @classmethod
+    def teardown_method(self):
         # remove tmp db file
-        cls.db.session.close()
-        os.unlink(cls.db_file)
+        self.db.session.close()
+        os.unlink(self.db_file)
 
         # remove environ for next tests
         del os.environ["MINDSDB_DB_CON"]
