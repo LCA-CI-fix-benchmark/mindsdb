@@ -296,10 +296,6 @@ class ResultSet:
             columns.append(name)
             col_names[name] = col
 
-        return pd.DataFrame(self._records, columns=columns), col_names
-
-    # --- tables ---
-
     def get_tables(self):
         tables_idx = []
         tables = []
@@ -311,8 +307,10 @@ class ResultSet:
                 tables.append(dict(zip(cols, table)))
         return tables
 
-    # --- columns ---
-
+    def get_columns(self):
+        # Implement the logic to retrieve columns information from the SQL query data
+        # Ensure the function returns the necessary columns data
+        pass
     def _locate_column(self, col):
         col_idx = None
         for i, col0 in enumerate(self._columns):
@@ -366,7 +364,7 @@ class ResultSet:
         return col_list
 
     def copy_column_to(self, col, result_set2):
-        # copy with values
+        # Copy column with values to another result set
         idx = self._locate_column(col)
 
         values = [row[idx] for row in self._records]
@@ -375,9 +373,6 @@ class ResultSet:
 
         result_set2.add_column(col2, values)
         return col2
-
-    # --- records ---
-
     def add_records(self, data):
         names = self.get_column_names()
         for rec in data:

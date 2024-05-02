@@ -233,20 +233,17 @@ def check_relative_reqs():
             # Report on relative imports (like "from ..file_handler import FileHandler")
             for line in relative_imported_handlers:
                 errors.append(f"{line} <- Relative import of handler. Use absolute import instead")
+# Report on imports of other handlers that are missing a corresponding requirements.txt entry
+for line, imported_handler_name in imported_handlers.items():
+    if imported_handler_name not in required_handlers:
+        errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
 
-            # Report on imports of other handlers that are missing a corresponding requirements.txt entry
-            for line, imported_handler_name in imported_handlers.items():
-                if imported_handler_name not in required_handlers:
-                    errors.append(f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
+# Print all of the errors for this .py file
+print_errors(file, errors)
 
-            # Print all of the errors for this .py file
-            print_errors(file, errors)
-
-        # Report on requirements.txt entries that point to a handler that isn't used
-        requirements_errors = [required_handler_name for required_handler_name in required_handlers if required_handler_name not in all_imported_handlers]
-        print_errors(handler_dir, requirements_errors)
-
-
+# Report on requirements.txt entries that point to a handler that isn't used
+requirements_errors = [required_handler_name for required_handler_name in required_handlers if required_handler_name not in all_imported_handlers]
+print_errors(handler_dir, requirements_errors)
 def check_requirements_imports():
     """
     Use deptry to find issues with dependencies.
