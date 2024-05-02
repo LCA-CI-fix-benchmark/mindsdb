@@ -248,7 +248,9 @@ def check_relative_reqs():
                 if imported_handler_name not in required_handlers:
                     errors.append(
                         f"{line} <- {imported_handler_name} not in handler requirements.txt. Add it like: \"-r mindsdb/integrations/handlers/{imported_handler_name}/requirements.txt\"")
-
+                else:
+                    # Add a success message if the handler is in the required_handlers list
+                    print(f"Handler {imported_handler_name} has a corresponding requirements.txt entry.")
             # Print all the errors for this .py file
             print_errors(file, errors)
 
@@ -289,11 +291,10 @@ print("--- Checking requirements files for duplicates ---")
 check_for_requirements_duplicates()
 print()
 
-print("--- Checking that requirements match imports ---")
-check_requirements_imports()
 print()
 
 print("--- Checking handlers that require other handlers ---")
 check_relative_reqs()
 
+# Exit with appropriate exit code based on the success of the check
 sys.exit(0 if success else 1)

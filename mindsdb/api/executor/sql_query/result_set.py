@@ -122,7 +122,6 @@ class ResultSet:
         return tables
 
     # --- columns ---
-
     def _locate_column(self, col):
         col_idx = None
         for i, col0 in enumerate(self._columns):
