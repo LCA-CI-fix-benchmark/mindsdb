@@ -293,7 +293,8 @@ print("--- Checking that requirements match imports ---")
 check_requirements_imports()
 print()
 
+from handlers import check_relative_reqs
+
 print("--- Checking handlers that require other handlers ---")
 check_relative_reqs()
-
 sys.exit(0 if success else 1)
