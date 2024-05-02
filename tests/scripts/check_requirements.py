@@ -238,7 +238,6 @@ def check_relative_reqs():
             imported_handlers = {line: line.split("_handler")[0].split(".")[-1] + "_handler" for line in
                                  handler_import_lines}
             all_imported_handlers += imported_handlers.values()
-
             # Report on relative imports (like "from ..file_handler import FileHandler")
             for line in relative_imported_handlers:
                 errors.append(f"{line} <- Relative import of handler. Use absolute import instead")

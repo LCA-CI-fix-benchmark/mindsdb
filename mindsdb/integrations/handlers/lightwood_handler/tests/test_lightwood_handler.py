@@ -247,12 +247,10 @@ class LightwoodHandlerTest(unittest.TestCase):
 
     # def test_16_join_predictor_ts_model_left(self):
     #     # TODO: is this one needed?
-    #     target = 'Traffic'
-    #     oby = 'T'
-    #     query = f"SELECT tb.{target} as predicted, ta.{target} as truth, ta.{oby} from mindsdb.{self.test_tsmodel_name_1} AS tb JOIN {self.sql_handler_name}.{self.data_table_name_2} AS ta ON 1=1 WHERE ta.{oby} > LATEST LIMIT 10"
-    #     parsed = self.handler.parser(query, dialect=self.handler.dialect)
-    #     predicted = self.handler.join(parsed, self.data_handler)  # , into=self.model_2_into_table) # TODO: restore when we add support for SQLite and other handlers for `into`
-
-
+    # target = 'Traffic'
+    # oby = 'T'
+    # query = f"SELECT tb.{target} as predicted, ta.{target} as truth, ta.{oby} from mindsdb.{self.test_tsmodel_name_1} AS tb JOIN {self.sql_handler_name}.{self.data_table_name_2} AS ta ON 1=1 WHERE ta.{oby} > LATEST LIMIT 10"
+    # parsed = self.handler.parser(query, dialect=self.handler.dialect)
+    # predicted = self.handler.join(parsed, self.data_handler)  # , into=self.model_2_into_table) # TODO: restore when we add support for SQLite and other handlers for `into`
 if __name__ == "__main__":
     unittest.main(failfast=True)
