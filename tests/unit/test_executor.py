@@ -185,7 +185,6 @@ class Test(BaseExecutorMockPredictor):
             'predicted_value': ''
         }
         self.set_predictor(predictor)
-
         # set predictor output
         predict_result = [
             # window
@@ -194,6 +193,7 @@ class Test(BaseExecutorMockPredictor):
             # horizon
             {'a': 4, 't': dt.datetime(2020, 1, 4), 'g': 'x', '__mindsdb_row_id': None},
             {'a': 5, 't': dt.datetime(2020, 1, 5), 'g': 'x', '__mindsdb_row_id': None},
+        ]
             {'a': 6, 't': dt.datetime(2020, 1, 6), 'g': 'x', '__mindsdb_row_id': None},
 
             # window

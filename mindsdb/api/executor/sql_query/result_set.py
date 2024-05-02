@@ -191,9 +191,6 @@ class ResultSet:
     def add_records(self, data):
         names = self.get_column_names()
         for rec in data:
-            # if len(rec) != len(self._columns):
-            #     raise ErSqlWrongArguments(f'Record length mismatch columns length: {len(rec)} != {len(self._columns)}')
-
             record = [
                 rec[name]
                 for name in names

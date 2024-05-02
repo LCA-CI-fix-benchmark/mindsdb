@@ -256,8 +256,6 @@ def check_relative_reqs():
         requirements_errors = [required_handler_name for required_handler_name in required_handlers if
                                required_handler_name not in all_imported_handlers]
         print_errors(handler_dir, requirements_errors)
-
-
 def check_requirements_imports():
     """
     Use deptry to find issues with dependencies.
