@@ -145,11 +145,18 @@ def run_deptry(reqs, rule_ignores, path, extra_args=""):
     errors = []
     try:
         result = subprocess.run(
-            f"deptry -o deptry.json --no-ansi --known-first-party mindsdb --requirements-txt \"{reqs}\" --per-rule-ignores \"{rule_ignores}\" --package-module-name-map \"{get_ignores_str(PACKAGE_NAME_MAP)}\" {extra_args} {path}",
-            shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE
+            f"deptry -o deptry.json --no-ansi --known-first-party mindsdb --requirements-txt \"{reqs}\" --per-rule-ignores \"{rule_ignores}\" --package-module-name-map \"{get_ignores_str(PACKAGE_NAME_MAP)}\" {extra_args} {path}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE
         )
         if result.returncode != 0 and not os.path.exists("deptry.json"):
-            # There was some issue with running deptry
+            # There was some issue with running deptry, retry a few times
+            attempts = 1
+            while attempts < MAX_ATTEMPTS:
+                result = subprocess.run(
+                    f"deptry -o deptry.json --no-ansi --known-first-party mindsdb --requirements-txt \"{reqs}\" --per-rule-ignores \"{rule_ignores}\" --package-module-name-map \"{get_ignores_str(PACKAGE_NAME_MAP)}\" {extra_args} {path}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE
+                )
+                if result.returncode == 0 and os.path.exists("deptry.json"):
+                    break
+                attempts += 1
             errors.append(f"Error running deptry: {result.stderr.decode('utf-8')}")
 
         with open("deptry.json", "r") as f:
