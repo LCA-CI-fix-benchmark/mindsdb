@@ -57,6 +57,7 @@ BYOM_HANLDER_DEPS = ["pyarrow"]
 
 HANDLER_RULE_IGNORES = {
     "DEP002": OPTIONAL_HANDLER_DEPS + MAIN_REQUIREMENTS_DEPS + BYOM_HANLDER_DEPS,
+    "DEP002": ["sentence-transformers"],  # Add exception for sentence-transformers
     "DEP001": ["tests"]  # 'tests' is the mindsdb tests folder in the repo root
 }
 
