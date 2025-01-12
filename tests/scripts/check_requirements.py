@@ -104,7 +104,7 @@ PACKAGE_NAME_MAP = {
     "grpcio-tools": ["grpc"],
     "psycopg2-binary": ["psycopg2"],
     "psycopg-binary": ["psycopg"],
-    "pymongo": ["pymongo", "bson"],
+    "pymongo": ["pymongo", "bson", "pymongo.collection", "pymongo.database"],
     "python-multipart": ["multipart"],
     "pydateinfer": ["dateinfer"],
     "scikit-learn": ["sklearn"],
