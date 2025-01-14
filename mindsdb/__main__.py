@@ -30,6 +30,7 @@ from mindsdb.utilities.ps import is_pid_listen_port, get_child_pids
 from mindsdb.utilities.functions import args_parse, get_versions_where_predictors_become_obsolete
 from mindsdb.interfaces.database.integrations import integration_controller
 import mindsdb.interfaces.storage.db as db
+import type_infer
 from mindsdb.integrations.utilities.install import install_dependencies
 from mindsdb.utilities.fs import create_dirs_recursive, clean_process_marks, clean_unlinked_process_marks
 from mindsdb.utilities.telemetry import telemetry_file_exists, disable_telemetry
