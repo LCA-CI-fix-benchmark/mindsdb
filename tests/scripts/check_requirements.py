@@ -57,7 +57,7 @@ BYOM_HANLDER_DEPS = ["pyarrow"]
 
 HANDLER_RULE_IGNORES = {
     "DEP002": OPTIONAL_HANDLER_DEPS + MAIN_REQUIREMENTS_DEPS + BYOM_HANLDER_DEPS,
-    "DEP001": ["tests"]  # 'tests' is the mindsdb tests folder in the repo root
+    "DEP001": ["tests", "sentence_transformers"]  # Ignore unused imports for tests and sentence_transformers
 }
 
 PACKAGE_NAME_MAP = {
