@@ -65,6 +65,7 @@ PACKAGE_NAME_MAP = {
     "mysql-connector-python": ["mysql"],
     "snowflake-connector-python": ["snowflake"],
     "snowflake-sqlalchemy": ["snowflake"],
+    "cryptography": ["cryptography"],
     "auto-sklearn": ["autosklearn"],
     "google-cloud-aiplatform": ["google"],
     "google-cloud-bigquery": ["google"],
