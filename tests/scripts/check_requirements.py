@@ -48,6 +48,8 @@ MAIN_RULE_IGNORES = {
 # pypdf and openpyxl are optional deps of langchain, that are used for the file handler
 OPTIONAL_HANDLER_DEPS = ["pysqlite3", "torch", "openai", "tiktoken", "wikipedia", "anthropic", "pypdf", "openpyxl"]
 
+# Adding 'sentence-transformers' to the list of optional dependencies to prevent false-positive errors
+OPTIONAL_HANDLER_DEPS.append("sentence-transformers")
 # List of rules we can ignore for specific packages
 # Here we ignore any packages in the main requirements.txt for "listed but not used" errors, because they will be used for the core code but not necessarily in a given handler
 MAIN_REQUIREMENTS_DEPS = get_requirements_from_file(MAIN_REQS_PATH) + get_requirements_from_file(
