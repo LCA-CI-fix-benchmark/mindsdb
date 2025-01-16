@@ -127,7 +127,7 @@ def print_errors(file, errors):
     global success
     if len(errors) > 0:
         success = False
-        print(f"- {file}")
+        print(f"- {file}\n    " + "\n    ".join(errors))
         for line in errors:
             print("    " + line)
         print()
