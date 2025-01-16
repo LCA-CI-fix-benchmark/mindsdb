@@ -134,7 +134,8 @@ def print_errors(file, errors):
 
 
 def get_ignores_str(ignores_dict):
-    """Get a list of rule ignores for deptry"""
+    """Get a list of rule ignores for deptry. """
+    return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])
 
     return ",".join([f"{k}={'|'.join(v)}" for k, v in ignores_dict.items()])
 
