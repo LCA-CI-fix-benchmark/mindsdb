@@ -250,7 +250,158 @@ if __name__ == '__main__':
             integration_name,
             handler,
         ) in integration_controller.get_handlers_import_status().items():
-            if handler.get("permanent"):
+            if handler.get("permanent") is not True:
+                continue
+            integration_meta = integration_controller.get(name=integration_name)
+            if integration_meta is None:
+                integration_record = db.Integration(
+                    name=integration_name,
+                    data={},
+                    engine=integration_name,
+                    company_id=None,
+                )
+                db.session.add(integration_record)
+                db.session.commit()
+        # endregion
+
+        # region Mark old predictors as outdated
+        is_modified = False
+        predictor_records = (
+            db.session.query(db.Predictor)
+            .filter(db.Predictor.deleted_at.is_(None))
+            .all()
+        )
+        if len(predictor_records) > 0:
+            (
+                sucess,
+                compatible_versions,
+            ) = get_versions_where_predictors_become_obsolete()
+            if sucess is True:
+                compatible_versions = [version.parse(x) for x in compatible_versions]
+                mindsdb_version_parsed = version.parse(mindsdb_version)
+                compatible_versions = [x for x in compatible_versions if x <= mindsdb_version_parsed]
+                if len(compatible_versions) > 0:
+                    last_compatible_version = compatible_versions[-1]
+                    for predictor_record in predictor_records:
+                        if (
+                            isinstance(predictor_record.mindsdb_version, str)
+                            and version.parse(predictor_record.mindsdb_version) < last_compatible_version
+                        ):
+                            predictor_record.update_status = "available"
+                            is_modified = True
+        if is_modified is True:
+            db.session.commit()
+        # endregion
+
+        if args.api is None:  # If "--api" option is not specified, start the default APIs
+            api_arr = ['http', 'mysql']
+        elif args.api == "":  # If "--api=" (blank) is specified, don't start any APIs
+            api_arr = []
+        else:  # The user has provided a list of APIs to start
+            api_arr = args.api.split(',')
+
+        apis = {
+            api: {
+                'port': config['api'][api]['port'],
+                'process': None,
+                'started': False
+            } for api in api_arr
+        }
+
+        start_functions = {
+            'http': start_http,
+            'mysql': start_mysql,
+            'mongodb': start_mongo,
+            'postgres': start_postgres,
+            'jobs': start_scheduler,
+            'tasks': start_tasks,
+            'ml_task_queue': start_ml_task_queue
+        }
+
+        if config.get("jobs", {}).get("disable") is not True:
+            apis["jobs"] = {"process": None, "started": False}
+
+        # disabled on cloud
+        if config.get('tasks', {}).get('disable') is not True:
+            apis['tasks'] = {
+                'process': None,
+                'started': False
+            }
+
+        if args.ml_task_queue_consumer is True:
+            apis['ml_task_queue'] = {
+                'process': None,
+                'started': False
+            }
+
+        # TODO this 'ctx' is eclipsing 'context' class imported as 'ctx'
+        ctx = mp.get_context("spawn")
+        for api_name, api_data in apis.items():
+            if api_data["started"]:
+                continue
+            logger.info(f"{api_name} API: starting...")
+            try:
+                process_args = (args.verbose,)
+                if api_name == 'http':
+                    process_args = (args.verbose, args.no_studio)
+                p = ctx.Process(target=start_functions[api_name], args=process_args, name=api_name)
+                p.start()
+                api_data["process"] = p
+            except Exception as e:
+                logger.error(
+                    f"Failed to start {api_name} API with exception {e}\n{traceback.format_exc()}"
+                )
+                close_api_gracefully(apis)
+                raise e
+
+        atexit.register(close_api_gracefully, apis=apis)
+
+        async def wait_api_start(api_name, pid, port):
+            timeout = 60
+            start_time = time.time()
+            started = is_pid_listen_port(pid, port)
+            while (time.time() - start_time) < timeout and started is False:
+                await asyncio.sleep(0.5)
+                started = is_pid_listen_port(pid, port)
+            return api_name, port, started
+
+        async def wait_apis_start():
+            futures = [
+                wait_api_start(api_name, api_data["process"].pid, api_data["port"])
+                for api_name, api_data in apis.items()
+                if "port" in api_data
+            ]
+            for i, future in enumerate(asyncio.as_completed(futures)):
+                api_name, port, started = await future
+                if started:
+                    logger.info(f"{api_name} API: started on {port}")
+                else:
+                    logger.error(f"ERROR: {api_name} API cant start on {port}")
+
+        async def join_process(process, name):
+            try:
+                while process.is_alive():
+                    process.join(1)
+                    await asyncio.sleep(0)
+            except KeyboardInterrupt:
+                logger.info("Got keyboard interrupt, stopping APIs")
+                close_api_gracefully(apis)
+            finally:
+                logger.info(f"{name} API: stopped")
+
+        async def gather_apis():
+            await asyncio.gather(
+                *[join_process(api_data['process'], api_name) for api_name, api_data in apis.items()],
+                return_exceptions=False
+            )
+
+        ioloop = asyncio.new_event_loop()
+        ioloop.run_until_complete(wait_apis_start())
+
+        threading.Thread(target=do_clean_process_marks).start()
+
+        ioloop.run_until_complete(gather_apis())
+        ioloop.close()
                 integration_meta = integration_controller.get(name=integration_name)
                 if integration_meta is None:
                     integration_record = db.Integration(
