@@ -142,7 +142,7 @@ def get_ignores_str(ignores_dict):
 def run_deptry(reqs, rule_ignores, path, extra_args=""):
     """Run a dependency check with deptry. Return a list of error messages"""
 
-    errors = []
+    errors = run_deptry(reqs, rule_ignores, path, f"--extend-exclude \"{'|'.join(MAIN_EXCLUDE_PATHS)}\" {extra_args} {path}")
     try:
         result = subprocess.run(
             f"deptry -o deptry.json --no-ansi --known-first-party mindsdb --requirements-txt \"{reqs}\" --per-rule-ignores \"{rule_ignores}\" --package-module-name-map \"{get_ignores_str(PACKAGE_NAME_MAP)}\" {extra_args} {path}",
