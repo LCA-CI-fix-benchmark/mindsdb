@@ -55,6 +55,8 @@ MAIN_REQUIREMENTS_DEPS = get_requirements_from_file(MAIN_REQS_PATH) + get_requir
 
 BYOM_HANLDER_DEPS = ["pyarrow"]
 
+ # Adding sentence-transformers to the list of optional handler dependencies since it is used in a specific context
+ OPTIONAL_HANDLER_DEPS.append("sentence-transformers")
 HANDLER_RULE_IGNORES = {
     "DEP002": OPTIONAL_HANDLER_DEPS + MAIN_REQUIREMENTS_DEPS + BYOM_HANLDER_DEPS,
     "DEP001": ["tests"]  # 'tests' is the mindsdb tests folder in the repo root
