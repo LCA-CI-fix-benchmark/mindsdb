@@ -37,6 +37,7 @@ from mindsdb.utilities.context import context as ctx
 from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
 
 try:
+    import type_infer  # Ensure this import is actually needed or remove
     import torch.multiprocessing as mp
 except Exception:
     import multiprocessing as mp
