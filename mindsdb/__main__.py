@@ -1,5 +1,6 @@
 from mindsdb.utilities import log
 
+MAX_RETRIES = 3
 logger = log.getLogger("mindsdb")
 logger.debug("Starting MindsDB...")
 
