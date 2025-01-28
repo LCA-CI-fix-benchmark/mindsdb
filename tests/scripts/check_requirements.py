@@ -10,6 +10,13 @@ pattern = '\=|~|>|<| |\n|#|\['  # noqa: W605
 
 def get_requirements_from_file(path):
     """Takes a requirements file path and extracts only the package names from it"""
+    reqs = []
+    with open(path, 'r') as main_f:
+        for line in main_f.readlines():
+            line = line.strip()
+            if line and not line.startswith('#'):
+                reqs.append(re.split(pattern, line)[0])
+    return reqs
 
     with open(path, 'r') as main_f:
         reqs = [
