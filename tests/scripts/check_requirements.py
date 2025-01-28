@@ -40,6 +40,7 @@ MAIN_RULE_IGNORES = {
     "DEP003": ["torch"],
     # Ignore Langhchain since the requirements check will still fail even if it's conditionally imported for certain features.
     "DEP001": ["torch"],
+    "DEP002": ["sentence-transformers"],
     "DEP002": ["psycopg2-binary"],
 }
 
@@ -156,6 +157,7 @@ def run_deptry(reqs, rule_ignores, path, extra_args=""):
             deptry_results = json.loads(f.read())
         for r in deptry_results:
             errors.append(
+                f"[{r['error']['code']}] {r['location']['file']}:{r['location']['line']}:{r['location']['column']}: {r['error']['message']}"
                 f"{r['location']['line']}:{r['location']['column']}: {r['error']['code']} {r['error']['message']}")
     finally:
         if os.path.exists("deptry.json"):
