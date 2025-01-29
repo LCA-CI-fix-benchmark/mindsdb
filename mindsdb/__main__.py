@@ -127,11 +127,11 @@ if __name__ == '__main__':
     config = Config()
     create_dirs_recursive(config['paths'])
 
-    if telemetry_file_exists(config['storage_dir']):
+    if telemetry_file_exists(config.paths['storage']):
         os.environ['CHECK_FOR_UPDATES'] = '0'
         logger.info('\n x telemetry disabled! \n')
     elif os.getenv('CHECK_FOR_UPDATES', '1').lower() in ['0', 'false', 'False'] or config.get('cloud', False):
-        disable_telemetry(config['storage_dir'])
+        disable_telemetry(config.paths['storage'])
         logger.info('\n x telemetry disabled! \n')
     else:
         logger.info("✓ telemetry enabled")
@@ -307,16 +307,6 @@ if __name__ == '__main__':
         } for api in api_arr
     }
 
-    start_functions = {
-        'http': start_http,
-        'mysql': start_mysql,
-        'mongodb': start_mongo,
-        'postgres': start_postgres,
-        'jobs': start_scheduler,
-        'tasks': start_tasks,
-        'ml_task_queue': start_ml_task_queue
-    }
-
     if config.get("jobs", {}).get("disable") is not True:
         apis["jobs"] = {"process": None, "started": False}
 
@@ -332,6 +322,16 @@ if __name__ == '__main__':
             'process': None,
             'started': False
         }
+
+    start_functions = {
+        'http': start_http,
+        'mysql': start_mysql,
+        'mongodb': start_mongo,
+        'postgres': start_postgres,
+        'jobs': start_scheduler,
+        'tasks': start_tasks,
+        'ml_task_queue': start_ml_task_queue
+    }
 
     # TODO this 'ctx' is eclipsing 'context' class imported as 'ctx'
     ctx = mp.get_context("spawn")
