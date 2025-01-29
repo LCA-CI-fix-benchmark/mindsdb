@@ -1,7 +1,6 @@
 from mindsdb.utilities import log
 
 logger = log.getLogger("mindsdb")
-logger.debug("Starting MindsDB...")
 
 import os
 import sys
@@ -295,7 +294,6 @@ if __name__ == '__main__':
     if args.api is None:  # If "--api" option is not specified, start the default APIs
         api_arr = ['http', 'mysql']
     elif args.api == "":  # If "--api=" (blank) is specified, don't start any APIs
-        api_arr = []
     else:  # The user has provided a list of APIs to start
         api_arr = args.api.split(',')
 
@@ -341,7 +339,6 @@ if __name__ == '__main__':
         logger.info(f"{api_name} API: starting...")
         try:
             process_args = (args.verbose,)
-            if api_name == 'http':
                 process_args = (args.verbose, args.no_studio)
             p = ctx.Process(target=start_functions[api_name], args=process_args, name=api_name)
             p.start()
@@ -396,7 +393,6 @@ if __name__ == '__main__':
 
     ioloop = asyncio.new_event_loop()
     ioloop.run_until_complete(wait_apis_start())
-
     threading.Thread(target=do_clean_process_marks).start()
 
     ioloop.run_until_complete(gather_apis())
