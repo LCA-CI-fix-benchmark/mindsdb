@@ -63,6 +63,7 @@ HANDLER_RULE_IGNORES = {
 PACKAGE_NAME_MAP = {
     "scylla-driver": ["cassandra"],
     "mysql-connector-python": ["mysql"],
+    "sentence-transformers": ["sentence_transformers"], 
     "snowflake-connector-python": ["snowflake"],
     "snowflake-sqlalchemy": ["snowflake"],
     "auto-sklearn": ["autosklearn"],
