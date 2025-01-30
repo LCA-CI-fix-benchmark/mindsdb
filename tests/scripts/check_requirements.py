@@ -280,6 +280,7 @@ def check_requirements_imports():
         errors = run_deptry(
             f"{file},{MAIN_REQS_PATH},{TEST_REQS_PATH}",
             get_ignores_str(HANDLER_RULE_IGNORES),
+            get_ignores_str(HANDLER_RULE_IGNORES.get(file, {})),
             os.path.dirname(file),
         )
         print_errors(file, errors)
