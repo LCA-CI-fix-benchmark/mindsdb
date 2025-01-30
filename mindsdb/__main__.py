@@ -27,13 +27,11 @@ from mindsdb.utilities.ml_task_queue.consumer import start as start_ml_task_queu
 from mindsdb.interfaces.jobs.scheduler import start as start_scheduler
 from mindsdb.utilities.config import Config
 from mindsdb.utilities.ps import is_pid_listen_port, get_child_pids
-from mindsdb.utilities.functions import args_parse, get_versions_where_predictors_become_obsolete
-from mindsdb.interfaces.database.integrations import integration_controller
 import mindsdb.interfaces.storage.db as db
-from mindsdb.integrations.utilities.install import install_dependencies
 from mindsdb.utilities.fs import create_dirs_recursive, clean_process_marks, clean_unlinked_process_marks
 from mindsdb.utilities.telemetry import telemetry_file_exists, disable_telemetry
 from mindsdb.utilities.context import context as ctx
+from mindsdb.utilities.config import args_parse
 from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
 
 try:
@@ -90,23 +88,7 @@ if __name__ == '__main__':
 
     # ---- CHECK SYSTEM ----
     if not (sys.version_info[0] >= 3 and sys.version_info[1] >= 8):
-        print("""
-     MindsDB requires Python >= 3.8 to run
-
-     Once you have Python 3.8 installed you can tun mindsdb as follows:
-
-     1. create and activate venv:
-     python3.8 -m venv venv
-     source venv/bin/activate
-
-     2. install MindsDB:
-     pip3 install mindsdb
-
-     3. Run MindsDB
-     python3.8 -m mindsdb
-
-     More instructions in https://docs.mindsdb.com
-         """)
+        logger.error("MindsDB requires Python >= 3.8 to run")
         exit(1)
 
     # --- VERSION MODE ----
@@ -115,7 +97,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     # --- MODULE OR LIBRARY IMPORT MODE ----
-    if args is not None and args.config is not None:
+    if args and args.config:
         config_path = args.config
         with open(config_path, 'r') as fp:
             user_config = json.load(fp)
@@ -129,10 +111,10 @@ if __name__ == '__main__':
 
     if telemetry_file_exists(config['storage_dir']):
         os.environ['CHECK_FOR_UPDATES'] = '0'
-        logger.info('\n x telemetry disabled! \n')
+        logger.info('telemetry disabled')
     elif os.getenv('CHECK_FOR_UPDATES', '1').lower() in ['0', 'false', 'False'] or config.get('cloud', False):
         disable_telemetry(config['storage_dir'])
-        logger.info('\n x telemetry disabled! \n')
+        logger.info('telemetry disabled')
     else:
         logger.info("✓ telemetry enabled")
 
@@ -182,31 +164,9 @@ if __name__ == '__main__':
             logger.error(f"Error! Something went wrong during DB migrations: {e}")
 
     if args.verbose is True:
-        # Figure this one out later
-        pass
-
-    if args.install_handlers is not None:
-        handlers_list = [s.strip() for s in args.install_handlers.split(",")]
-        # import_meta = handler_meta.get('import', {})
-        for handler_name, handler_meta in integration_controller.get_handlers_import_status().items():
-            if handler_name not in handlers_list:
-                continue
-            import_meta = handler_meta.get("import", {})
-            if import_meta.get("success") is True:
-                logger.info(f"{'{0: <18}'.format(handler_name)} - already installed")
-                continue
-            result = install_dependencies(import_meta.get("dependencies", []))
-            if result.get("success") is True:
-                logger.info(
-                    f"{'{0: <18}'.format(handler_name)} - successfully installed"
-                )
-            else:
-                logger.info(
-                    f"{'{0: <18}'.format(handler_name)} - error during dependencies installation: {result.get('error_message', 'unknown error')}"
-                )
-        sys.exit(0)
-
-    logger.info(f"Version: {mindsdb_version}")
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
     logger.info(f"Configuration file: {config.config_path}")
     logger.info(f"Storage path: {config['paths']['root']}")
     logger.debug(f"User config: {user_config}")
@@ -350,7 +310,11 @@ if __name__ == '__main__':
             logger.error(
                 f"Failed to start {api_name} API with exception {e}\n{traceback.format_exc()}"
             )
-            close_api_gracefully(apis)
+            close_apis(apis)
+def close_apis(apis):
+    for api in apis.values():
+        if api['process'] is not None:
+            api['process'].terminate()
             raise e
 
     atexit.register(close_api_gracefully, apis=apis)
